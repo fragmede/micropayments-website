@@ -11,6 +11,8 @@ lerna-debug.log*
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # Runtime data
+node_modules/
+dist/
 pids
 *.pid
 *.seed
@@ -128,3 +130,20 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+=======
+lib-cov
+coverage/
+.grunt/
+bower_components/
+build/Release
+jspm_packages/
+.npm
+.eslintcache
+.node_repl_history
+.yarn-integrity
+.env
+.DS_Store
+stats.json
+.vscode/
+.idea/
+>>>>>>> ba2ab44efc1f (initial)

@@ -1,5 +1,7 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
+
 
 module.exports = {
   entry: './src/index.js',
@@ -20,14 +22,21 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.jsx'],
+      fallback: { "crypto": require.resolve("crypto-browserify") },
+      fallback: { "url": require.resolve("url/") },
+      fallback: { "zlib": require.resolve("browserify-zlib") }
+
   },
   plugins: [
     new HtmlWebpackPlugin({
       template: './src/index.html',
     }),
+    new NodePolyfillPlugin(),
   ],
   devServer: {
-    contentBase: path.resolve(__dirname, 'dist'),
+    static: {
+      directory: path.resolve(__dirname, 'dist'),
+    },
     port: 3000,
   },
 };

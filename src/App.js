@@ -4,7 +4,7 @@ import {
   WalletProvider
 } from '@solana/wallet-adapter-react';
 import {
-  getPhantomWallet
+  PhantomWalletAdapter
 } from '@solana/wallet-adapter-wallets';
 import {
   WalletModalProvider,
@@ -13,7 +13,7 @@ import {
 
 const App = () => {
   const endpoint = useMemo(() => 'https://api.mainnet-beta.solana.com', []);
-  const wallets = useMemo(() => [getPhantomWallet()], []);
+  const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
 
   return (
     <ConnectionProvider endpoint={endpoint}>

@@ -28,8 +28,6 @@ module.exports = {
     extensions: ['.js', '.jsx'],
       fallback: { "crypto": require.resolve("crypto-browserify") },
       fallback: { "url": require.resolve("url/") },
-      fallback: { "zlib": require.resolve("browserify-zlib") }
-
   },
   plugins: [
     new HtmlWebpackPlugin({

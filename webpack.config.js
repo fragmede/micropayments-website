@@ -1,7 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const path = require('path');
-const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
-
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 module.exports = {
   entry: './src/index.js',
@@ -25,9 +24,17 @@ module.exports = {
     ],
   },
   resolve: {
+    fallback: {
+      process: require.resolve('process/browser'),
+      zlib: require.resolve('browserify-zlib'),
+      stream: require.resolve('stream-browserify'),
+      util: require.resolve('util'),
+      buffer: require.resolve('buffer'),
+      assert: require.resolve('assert'),
+      crypto: require.resolve('crypto-browserify'),
+      url: require.resolve('url/')
+    },
     extensions: ['.js', '.jsx'],
-      fallback: { "crypto": require.resolve("crypto-browserify") },
-      fallback: { "url": require.resolve("url/") },
   },
   plugins: [
     new HtmlWebpackPlugin({

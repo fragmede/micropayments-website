@@ -12,6 +12,7 @@ import {
   WalletMultiButton
 } from '@solana/wallet-adapter-react-ui';
 import { Connection, PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
+import ToggleComponent from './ToggleComponent';
 import CreateAccount from './CreateAccount';
 import FundIt from './FundIt';
 import GetSol from './GetSol';
@@ -95,11 +96,21 @@ const App = () => {
         <WalletModalProvider>
           <div style={{ padding: '20px', textAlign: 'center' }}>
             <h1>Micropayments.fyi</h1>
-            <CreateAccount />
-            <FundIt />
-            <GetSol />
-            <InstallPhantom />
-            <TransferToPhantom />
+            <ToggleComponent title="Create Account">
+              <CreateAccount />
+            </ToggleComponent>
+            <ToggleComponent title="Fund It">
+              <FundIt />
+            </ToggleComponent>
+            <ToggleComponent title="Get Sol">
+              <GetSol />
+            </ToggleComponent>
+            <ToggleComponent title="Install Phantom">
+              <InstallPhantom />
+            </ToggleComponent>
+            <ToggleComponent title="Transfer To Phantom">
+              <TransferToPhantom />
+            </ToggleComponent>
             <WalletMultiButton />
             <WalletStatus />
             <ChargeButton />

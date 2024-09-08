@@ -95,7 +95,7 @@ const App = () => {
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
-          <div style={{ padding: '20px', textAlign: 'center' }}>
+          <div style={{ padding: '20px', textAlign: 'center', fontFamily: '"Courier New", Courier, monospace' }}>
             <h1>Micropayments.fyi</h1>
           </div>
           <IntroBlurb />

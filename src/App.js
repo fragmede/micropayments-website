@@ -89,7 +89,7 @@ const App = () => {
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
           <div style={{ padding: '20px' }}>
-            <h1>Solana Phantom Wallet Integration</h1>
+            <h1>Micropayments.fyi</h1>
             <WalletMultiButton />
             <WalletStatus />
             <ChargeButton />

@@ -12,7 +12,7 @@ import {
   WalletMultiButton
 } from '@solana/wallet-adapter-react-ui';
 import { Connection, PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
-import ToggleComponent from './ToggleComponent';
+import ToggleStep from './ToggleStep';
 import WalletStatus from './WalletStatus';
 import ChargeButton from './ChargeButton';
 import IntroBlurb from './IntroBlurb';
@@ -59,37 +59,37 @@ const App = () => {
           </div>
           <IntroBlurb />
           <ol>
-            <li><ToggleComponent title="Create Account" visible={activeStep === 0}>
+            <li><ToggleStep title="Create Account" visible={activeStep === 0} onNext={handleNext}>
               <CreateAccount onNext={handleNext} />
-            </ToggleComponent>
+            </ToggleStep>
             </li>
-            <li><ToggleComponent title="Fund It" visible={activeStep === 1}>
+            <li><ToggleStep title="Fund It" visible={activeStep === 1} onNext={handleNext}>
               <FundIt onNext={handleNext} />
-            </ToggleComponent>
+            </ToggleStep>
             </li>
-            <li><ToggleComponent title="Get Sol" visible={activeStep === 2}>
+            <li><ToggleStep title="Get Sol" visible={activeStep === 2} onNext={handleNext}>
               <GetSol onNext={handleNext} />
-            </ToggleComponent>
+            </ToggleStep>
             </li>
-            <li><ToggleComponent title="Install Phantom" visible={activeStep === 3}>
+            <li><ToggleStep title="Install Phantom" visible={activeStep === 3} onNext={handleNext}>
               <InstallPhantom onNext={handleNext} />
-            </ToggleComponent>
+            </ToggleStep>
             </li>
-            <li><ToggleComponent title="Transfer To Phantom" visible={activeStep === 4}>
+            <li><ToggleStep title="Transfer To Phantom" visible={activeStep === 4} onNext={handleNext}>
               <TransferToPhantom onNext={handleNext} />
-            </ToggleComponent>
+            </ToggleStep>
             </li>
-            <li><ToggleComponent title="Connect Wallet" visible={activeStep === 5}>
+            <li><ToggleStep title="Connect Wallet" visible={activeStep === 5}>
             <WalletMultiButton />
-            </ToggleComponent>
+            </ToggleStep>
             </li>
-            <li><ToggleComponent title="Wallet Connected" visible={activeStep === 6}>
+            <li><ToggleStep title="Wallet Connected" visible={activeStep === 6}>
             <WalletStatus />
-            </ToggleComponent>
+            </ToggleStep>
             </li>
-            <li><ToggleComponent title="Charge 10 cents." visible={activeStep === 7}>
+            <li><ToggleStep title="Charge 10 cents." visible={activeStep === 7}>
             <ChargeButton />
-            </ToggleComponent>
+            </ToggleStep>
             </li>
             </ol>
         </WalletModalProvider>

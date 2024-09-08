@@ -96,25 +96,41 @@ const App = () => {
         <WalletModalProvider>
           <div style={{ padding: '20px', textAlign: 'center' }}>
             <h1>Micropayments.fyi</h1>
-            <ToggleComponent title="Create Account">
+          </div>
+          <ol>
+            <li><ToggleComponent title="Create Account">
               <CreateAccount />
             </ToggleComponent>
-            <ToggleComponent title="Fund It">
+            </li>
+            <li><ToggleComponent title="Fund It">
               <FundIt />
             </ToggleComponent>
-            <ToggleComponent title="Get Sol">
+            </li>
+            <li><ToggleComponent title="Get Sol">
               <GetSol />
             </ToggleComponent>
-            <ToggleComponent title="Install Phantom">
+            </li>
+            <li><ToggleComponent title="Install Phantom">
               <InstallPhantom />
             </ToggleComponent>
-            <ToggleComponent title="Transfer To Phantom">
+            </li>
+            <li><ToggleComponent title="Transfer To Phantom">
               <TransferToPhantom />
             </ToggleComponent>
+            </li>
+            <li><ToggleComponent title="Connect Wallet">
             <WalletMultiButton />
+            </ToggleComponent>
+            </li>
+            <li><ToggleComponent title="Wallet Connected">
             <WalletStatus />
+            </ToggleComponent>
+            </li>
+            <li><ToggleComponent title="Charge 10 cents.">
             <ChargeButton />
-          </div>
+            </ToggleComponent>
+            </li>
+            </ol>
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>

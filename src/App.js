@@ -13,6 +13,7 @@ import {
 } from '@solana/wallet-adapter-react-ui';
 import { Connection, PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
 import ToggleComponent from './ToggleComponent';
+import IntroBlurb from './IntroBlurb';
 import CreateAccount from './CreateAccount';
 import FundIt from './FundIt';
 import GetSol from './GetSol';
@@ -98,6 +99,7 @@ const App = () => {
             <h1>Micropayments.fyi</h1>
           </div>
           <ol>
+            <li><IntroBlurb /></li>
             <li><ToggleComponent title="Create Account">
               <CreateAccount />
             </ToggleComponent>

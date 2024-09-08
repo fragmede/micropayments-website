@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
+import Step from './Step';
 
-const CreateAccount = ({ onNext }) => {
-  return (
-    <div>
-      <h2>Create a New Account</h2>
-      <p>Account creation functionality will be implemented here.</p>
-      <button onClick={onNext}>Next</button>
-    </div>
-  );
-};
+class CreateAccount extends Step {
+  render() {
+    return (
+      <Step title="Create a New Account" onNext={this.props.onNext}>
+        <p>Account creation functionality will be implemented here.</p>
+      </Step>
+    );
+  }
+}
 
 export default CreateAccount;

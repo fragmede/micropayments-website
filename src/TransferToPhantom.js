@@ -1,12 +1,14 @@
 import React from 'react';
+import Step from './Step';
 
-const TransferToPhantom = () => {
-  return (
-    <div>
-      <h2>Transfer to Phantom</h2>
-      <p>Functionality to transfer funds to the Phantom wallet will be implemented here.</p>
-    </div>
-  );
-};
+class TransferToPhantom extends Step {
+  render() {
+    return (
+      <Step title="Transfer to Phantom">
+        <p>Functionality to transfer funds to the Phantom wallet will be implemented here.</p>
+      </Step>
+    );
+  }
+}
 
 export default TransferToPhantom;

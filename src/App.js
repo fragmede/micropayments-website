@@ -40,13 +40,9 @@ const App = () => {
   const [activeStep, setActiveStep] = useState(0);
   console.log("Current activeStep:", activeStep);
 
-  const handleNext = useCallback(() => {
-    console.log("handleNext called");
-    setActiveStep((prevStep) => {
-      const nextStep = prevStep + 1;
-      console.log("Next activeStep:", nextStep);
-      return nextStep;
-    });
+  const handleNext = useCallback((nextStep) => {
+    console.log("handleNext called with nextStep:", nextStep);
+    setActiveStep(nextStep);
   }, []);
 
   return (

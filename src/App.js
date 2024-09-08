@@ -15,6 +15,7 @@ import { Connection, PublicKey, SystemProgram, Transaction } from '@solana/web3.
 import CreateAccount from './CreateAccount';
 import FundIt from './FundIt';
 import GetSol from './GetSol';
+import InstallPhantom from './InstallPhantom';
 
 const WalletStatus = () => {
   const { connected, publicKey } = useWallet();
@@ -99,6 +100,7 @@ const App = () => {
             <CreateAccount />
             <FundIt />
             <GetSol />
+            <InstallPhantom />
           </div>
         </WalletModalProvider>
       </WalletProvider>

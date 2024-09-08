@@ -38,7 +38,11 @@ const App = () => {
   const endpoint = useMemo(() => RPC_URL, []);
   const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
 
-  return (
+  const [activeStep, setActiveStep] = useState(0);
+
+  const handleNext = useCallback(() => {
+    setActiveStep((prevStep) => prevStep + 1);
+  }, []);
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>

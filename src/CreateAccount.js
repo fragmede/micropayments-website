@@ -10,3 +10,15 @@ const CreateAccount = () => {
 };
 
 export default CreateAccount;
+import React from 'react';
+
+const CreateAccount = ({ onNext }) => {
+  return (
+    <div>
+      {/* Your existing CreateAccount content */}
+      <button onClick={onNext}>Next</button>
+    </div>
+  );
+};
+
+export default CreateAccount;

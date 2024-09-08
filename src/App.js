@@ -80,7 +80,11 @@ const CRYPTO_PROD = '9m26tsxSTd8gXTwQnYPLZpac57FzCY2mCdiCBufRgpQ1'
     }
   }, [publicKey, sendTransaction, connection]);
 
-  return (
+  const [activeStep, setActiveStep] = useState(0);
+
+  const handleNext = () => {
+    setActiveStep((prevStep) => prevStep + 1);
+  };
     <button onClick={chargeUser} disabled={!publicKey}>
       Charge 10 cents
     </button>
@@ -100,11 +104,11 @@ const App = () => {
           </div>
           <IntroBlurb />
           <ol>
-            <li><ToggleComponent title="Create Account" defaultVisible={true}>
-              <CreateAccount />
+            <li><ToggleComponent title="Create Account" defaultVisible={activeStep === 0}>
+              <CreateAccount onNext={handleNext} />
             </ToggleComponent>
             </li>
-            <li><ToggleComponent title="Fund It">
+            <li><ToggleComponent title="Fund It" defaultVisible={activeStep === 1}>
               <FundIt />
             </ToggleComponent>
             </li>

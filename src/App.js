@@ -13,6 +13,7 @@ import {
 } from '@solana/wallet-adapter-react-ui';
 import { Connection, PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
 import ToggleComponent from './ToggleComponent';
+import WalletStatus from './WalletStatus';
 import ChargeButton from './ChargeButton';
 import IntroBlurb from './IntroBlurb';
 import CreateAccount from './CreateAccount';
@@ -21,20 +22,6 @@ import GetSol from './GetSol';
 import InstallPhantom from './InstallPhantom';
 import TransferToPhantom from './TransferToPhantom';
 
-const WalletStatus = () => {
-  const { connected, publicKey } = useWallet();
-  const [status, setStatus] = useState('Disconnected');
-
-  useEffect(() => {
-    if (connected) {
-      setStatus(`Connected: ${publicKey.toString()}`);
-    } else {
-      setStatus('Disconnected');
-    }
-  }, [connected, publicKey]);
-
-  return <div>{status}</div>;
-};
 
 const config = {
     encoding: "jsonParsed",

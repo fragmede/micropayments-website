@@ -43,6 +43,8 @@ const App = () => {
   const handleNext = useCallback(() => {
     setActiveStep((prevStep) => prevStep + 1);
   }, []);
+
+  return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>

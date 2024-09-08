@@ -13,6 +13,7 @@ import {
 } from '@solana/wallet-adapter-react-ui';
 import { Connection, PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
 import ToggleComponent from './ToggleComponent';
+import ChargeButton from './ChargeButton';
 import IntroBlurb from './IntroBlurb';
 import CreateAccount from './CreateAccount';
 import FundIt from './FundIt';
@@ -45,52 +46,6 @@ const config = {
 const RPC_URL = 'https://rpc-proxy.lingering-sea-b5fd.workers.dev/'
 //'https://api.mainnet-beta.solana.com'
 
-const ChargeButton = () => {
-  const { publicKey, sendTransaction } = useWallet();
-  const connection = new Connection(RPC_URL);
-
-  const chargeUser = useCallback(async () => {
-    if (!publicKey) {
-      console.log('Wallet not connected');
-      return;
-    }
-
-const CRYPTO_TEST = 'GXmQ9JRpefccTssu3yhMmRVmXSJ7JEQa78pp9xQnsM78'
-const CRYPTO_PROD = '9m26tsxSTd8gXTwQnYPLZpac57FzCY2mCdiCBufRgpQ1'
-
-    const recipient = new PublicKey(CRYPTO_TEST); // Replace with your recipient public key
-    const lamports = 400000; // 0.004 SOL = 40000000 lamports ~= $.10 USD 2024.07.03
-
-    const transaction = new Transaction().add(
-      SystemProgram.transfer({
-        fromPubkey: publicKey,
-        toPubkey: recipient,
-        lamports,
-      })
-    );
-	console.log('here')
-
-    try {
-      const signature = await sendTransaction(transaction, connection);
-	  console.log('sent')
-      await connection.confirmTransaction(signature, 'confirmed');
-      console.log('Transaction successful:', signature);
-    } catch (error) {
-      console.error('Transaction failed:', error);
-    }
-  }, [publicKey, sendTransaction, connection]);
-
-  const [activeStep, setActiveStep] = useState(0);
-
-  const handleNext = () => {
-    setActiveStep((prevStep) => prevStep + 1);
-  };
-  return (
-    <button onClick={chargeUser} disabled={!publicKey}>
-      Charge 10 cents
-    </button>
-  );
-};
 
 const App = () => {
   const endpoint = useMemo(() => RPC_URL, []);

@@ -12,6 +12,7 @@ import {
   WalletMultiButton
 } from '@solana/wallet-adapter-react-ui';
 import { Connection, PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
+import CreateAccount from './CreateAccount';
 
 const WalletStatus = () => {
   const { connected, publicKey } = useWallet();
@@ -93,6 +94,7 @@ const App = () => {
             <WalletMultiButton />
             <WalletStatus />
             <ChargeButton />
+            <CreateAccount />
           </div>
         </WalletModalProvider>
       </WalletProvider>

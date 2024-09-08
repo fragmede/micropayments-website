@@ -146,4 +146,4 @@ jspm_packages/
 stats.json
 .vscode/
 .idea/
->>>>>>> ba2ab44efc1f (initial)
+.aider*

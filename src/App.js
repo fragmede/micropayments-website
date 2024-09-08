@@ -58,14 +58,14 @@ const App = () => {
           </div>
           <IntroBlurb />
           <ol>
-            <li><CreateAccount onNext={handleNext} visible={true} /></li>
-            <li> <FundIt onNext={handleNext} /> </li>
-            <li> <GetSol onNext={handleNext} /> </li>
-            <li> <InstallPhantom onNext={handleNext} /> </li>
-            <li> <TransferToPhantom onNext={handleNext} /> </li>
-            <li> <WalletMultiButton onNext={handleNext} /> </li>
-            <li> <WalletStatus onNext={handleNext} /> </li>
-            <li> <ChargeButton onNext={handleNext} /> </li>
+            <li><CreateAccount onNext={handleNext} visible={activeStep === 0} /></li>
+            <li> <FundIt onNext={handleNext} visible={activeStep === 1} /> </li>
+            <li> <GetSol onNext={handleNext} visible={activeStep === 2} /> </li>
+            <li> <InstallPhantom onNext={handleNext} visible={activeStep === 3} /> </li>
+            <li> <TransferToPhantom onNext={handleNext} visible={activeStep === 4} /> </li>
+            <li> <WalletMultiButton onNext={handleNext} visible={activeStep === 5} /> </li>
+            <li> <WalletStatus onNext={handleNext} visible={activeStep === 6} /> </li>
+            <li> <ChargeButton onNext={handleNext} visible={activeStep === 7} /> </li>
             </ol>
         </WalletModalProvider>
       </WalletProvider>

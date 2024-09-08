@@ -4,7 +4,7 @@ import Step from './Step';
 class CreateAccount extends Step {
   render() {
     return (
-      <Step title="Create a New Account" onNext={this.props.onNext}>
+      <Step title="Create a New Account">
         <p>Account creation functionality will be implemented here.</p>
       </Step>
     );

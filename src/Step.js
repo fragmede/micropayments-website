@@ -7,7 +7,7 @@ class Step extends React.Component {
       <div>
         <h2>{title}</h2>
         {children}
-        {onNext && <button onClick={onNext}>Next</button>}
+        <button onClick={onNext}>Next</button>
       </div>
     );
   }

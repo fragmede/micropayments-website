@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const ToggleComponent = ({ title, children, visible }) => {
   const [isVisible, setIsVisible] = useState(visible);

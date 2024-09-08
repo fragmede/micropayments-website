@@ -61,27 +61,27 @@ const App = () => {
               <FundIt />
             </ToggleComponent>
             </li>
-            <li><ToggleComponent title="Get Sol">
+            <li><ToggleComponent title="Get Sol" defaultVisible={activeStep === 2}>
               <GetSol />
             </ToggleComponent>
             </li>
-            <li><ToggleComponent title="Install Phantom">
+            <li><ToggleComponent title="Install Phantom" defaultVisible={activeStep === 3}>
               <InstallPhantom />
             </ToggleComponent>
             </li>
-            <li><ToggleComponent title="Transfer To Phantom">
+            <li><ToggleComponent title="Transfer To Phantom" defaultVisible={activeStep === 4}>
               <TransferToPhantom />
             </ToggleComponent>
             </li>
-            <li><ToggleComponent title="Connect Wallet">
+            <li><ToggleComponent title="Connect Wallet" defaultVisible={activeStep === 5}>
             <WalletMultiButton />
             </ToggleComponent>
             </li>
-            <li><ToggleComponent title="Wallet Connected">
+            <li><ToggleComponent title="Wallet Connected" defaultVisible={activeStep === 6}>
             <WalletStatus />
             </ToggleComponent>
             </li>
-            <li><ToggleComponent title="Charge 10 cents.">
+            <li><ToggleComponent title="Charge 10 cents." defaultVisible={activeStep === 7}>
             <ChargeButton />
             </ToggleComponent>
             </li>

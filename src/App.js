@@ -39,9 +39,15 @@ const App = () => {
   const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
 
   const [activeStep, setActiveStep] = useState(0);
+  console.log("Current activeStep:", activeStep);
 
   const handleNext = useCallback(() => {
-    setActiveStep((prevStep) => prevStep + 1);
+    console.log("handleNext called");
+    setActiveStep((prevStep) => {
+      const nextStep = prevStep + 1;
+      console.log("Next activeStep:", nextStep);
+      return nextStep;
+    });
   }, []);
 
   return (

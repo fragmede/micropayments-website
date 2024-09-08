@@ -4,7 +4,7 @@ class Step extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isVisible: props.visible
+            isVisible: props.visible || false
         };
     }
 

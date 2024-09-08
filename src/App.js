@@ -95,14 +95,14 @@ const App = () => {
         <WalletModalProvider>
           <div style={{ padding: '20px' }}>
             <h1>Micropayments.fyi</h1>
-            <WalletMultiButton />
-            <WalletStatus />
-            <ChargeButton />
             <CreateAccount />
             <FundIt />
             <GetSol />
             <InstallPhantom />
             <TransferToPhantom />
+            <WalletMultiButton />
+            <WalletStatus />
+            <ChargeButton />
           </div>
         </WalletModalProvider>
       </WalletProvider>

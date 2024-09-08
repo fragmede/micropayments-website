@@ -59,35 +59,35 @@ const App = () => {
           </div>
           <IntroBlurb />
           <ol>
-            <li><ToggleComponent title="Create Account" defaultVisible={activeStep === 0}>
+            <li><ToggleComponent title="Create Account" visible={activeStep === 0}>
               <CreateAccount onNext={handleNext} />
             </ToggleComponent>
             </li>
-            <li><ToggleComponent title="Fund It" defaultVisible={activeStep === 1}>
+            <li><ToggleComponent title="Fund It" visible={activeStep === 1}>
               <FundIt />
             </ToggleComponent>
             </li>
-            <li><ToggleComponent title="Get Sol" defaultVisible={activeStep === 2}>
+            <li><ToggleComponent title="Get Sol" visible={activeStep === 2}>
               <GetSol />
             </ToggleComponent>
             </li>
-            <li><ToggleComponent title="Install Phantom" defaultVisible={activeStep === 3}>
+            <li><ToggleComponent title="Install Phantom" visible={activeStep === 3}>
               <InstallPhantom />
             </ToggleComponent>
             </li>
-            <li><ToggleComponent title="Transfer To Phantom" defaultVisible={activeStep === 4}>
+            <li><ToggleComponent title="Transfer To Phantom" visible={activeStep === 4}>
               <TransferToPhantom />
             </ToggleComponent>
             </li>
-            <li><ToggleComponent title="Connect Wallet" defaultVisible={activeStep === 5}>
+            <li><ToggleComponent title="Connect Wallet" visible={activeStep === 5}>
             <WalletMultiButton />
             </ToggleComponent>
             </li>
-            <li><ToggleComponent title="Wallet Connected" defaultVisible={activeStep === 6}>
+            <li><ToggleComponent title="Wallet Connected" visible={activeStep === 6}>
             <WalletStatus />
             </ToggleComponent>
             </li>
-            <li><ToggleComponent title="Charge 10 cents." defaultVisible={activeStep === 7}>
+            <li><ToggleComponent title="Charge 10 cents." visible={activeStep === 7}>
             <ChargeButton />
             </ToggleComponent>
             </li>

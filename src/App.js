@@ -16,6 +16,7 @@ import CreateAccount from './CreateAccount';
 import FundIt from './FundIt';
 import GetSol from './GetSol';
 import InstallPhantom from './InstallPhantom';
+import TransferToPhantom from './TransferToPhantom';
 
 const WalletStatus = () => {
   const { connected, publicKey } = useWallet();
@@ -101,6 +102,7 @@ const App = () => {
             <FundIt />
             <GetSol />
             <InstallPhantom />
+            <TransferToPhantom />
           </div>
         </WalletModalProvider>
       </WalletProvider>

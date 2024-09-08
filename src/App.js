@@ -12,7 +12,6 @@ import {
   WalletMultiButton
 } from '@solana/wallet-adapter-react-ui';
 import { Connection, PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
-import ToggleStep from './ToggleStep';
 import WalletStatus from './WalletStatus';
 import ChargeButton from './ChargeButton';
 import IntroBlurb from './IntroBlurb';
@@ -59,38 +58,14 @@ const App = () => {
           </div>
           <IntroBlurb />
           <ol>
-            <li><ToggleStep title="Create Account" visible={activeStep === 0} onNext={handleNext}>
-              <CreateAccount onNext={handleNext} />
-            </ToggleStep>
-            </li>
-            <li><ToggleStep title="Fund It" visible={activeStep === 1} onNext={handleNext}>
-              <FundIt onNext={handleNext} />
-            </ToggleStep>
-            </li>
-            <li><ToggleStep title="Get Sol" visible={activeStep === 2} onNext={handleNext}>
-              <GetSol onNext={handleNext} />
-            </ToggleStep>
-            </li>
-            <li><ToggleStep title="Install Phantom" visible={activeStep === 3} onNext={handleNext}>
-              <InstallPhantom onNext={handleNext} />
-            </ToggleStep>
-            </li>
-            <li><ToggleStep title="Transfer To Phantom" visible={activeStep === 4} onNext={handleNext}>
-              <TransferToPhantom onNext={handleNext} />
-            </ToggleStep>
-            </li>
-            <li><ToggleStep title="Connect Wallet" visible={activeStep === 5}>
-            <WalletMultiButton />
-            </ToggleStep>
-            </li>
-            <li><ToggleStep title="Wallet Connected" visible={activeStep === 6}>
-            <WalletStatus />
-            </ToggleStep>
-            </li>
-            <li><ToggleStep title="Charge 10 cents." visible={activeStep === 7}>
-            <ChargeButton />
-            </ToggleStep>
-            </li>
+            <li><CreateAccount onNext={handleNext} /></li>
+            <li> <FundIt onNext={handleNext} /> </li>
+            <li> <GetSol onNext={handleNext} /> </li>
+            <li> <InstallPhantom onNext={handleNext} /> </li>
+            <li> <TransferToPhantom onNext={handleNext} /> </li>
+            <li> <WalletMultiButton onNext={handleNext} /> </li>
+            <li> <WalletStatus onNext={handleNext} /> </li>
+            <li> <ChargeButton onNext={handleNext} /> </li>
             </ol>
         </WalletModalProvider>
       </WalletProvider>

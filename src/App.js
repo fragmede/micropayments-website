@@ -64,19 +64,19 @@ const App = () => {
             </ToggleComponent>
             </li>
             <li><ToggleComponent title="Fund It" visible={activeStep === 1}>
-              <FundIt />
+              <FundIt onNext={handleNext} />
             </ToggleComponent>
             </li>
             <li><ToggleComponent title="Get Sol" visible={activeStep === 2}>
-              <GetSol />
+              <GetSol onNext={handleNext} />
             </ToggleComponent>
             </li>
             <li><ToggleComponent title="Install Phantom" visible={activeStep === 3}>
-              <InstallPhantom />
+              <InstallPhantom onNext={handleNext} />
             </ToggleComponent>
             </li>
             <li><ToggleComponent title="Transfer To Phantom" visible={activeStep === 4}>
-              <TransferToPhantom />
+              <TransferToPhantom onNext={handleNext} />
             </ToggleComponent>
             </li>
             <li><ToggleComponent title="Connect Wallet" visible={activeStep === 5}>

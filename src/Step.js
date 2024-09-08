@@ -6,6 +6,7 @@ class Step extends Component {
         this.state = {
             isVisible: props.visible || false
         };
+        console.log('state visi9ble ' + this.state.isVisible);
     }
 
     componentDidUpdate(prevProps) {
@@ -20,7 +21,10 @@ class Step extends Component {
 
     render() {
         const { title, children, onNext = () => {} } = this.props;
+        console.log('next');
+        console.log(onNext);
         const { isVisible } = this.state;
+        console.log('render vis ' + isVisible);
 
         return (
             <div>

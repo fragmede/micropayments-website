@@ -98,8 +98,8 @@ const App = () => {
           <div style={{ padding: '20px', textAlign: 'center' }}>
             <h1>Micropayments.fyi</h1>
           </div>
+          <IntroBlurb />
           <ol>
-            <li><IntroBlurb /></li>
             <li><ToggleComponent title="Create Account">
               <CreateAccount />
             </ToggleComponent>

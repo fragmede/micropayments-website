@@ -58,7 +58,7 @@ const App = () => {
           </div>
           <IntroBlurb />
           <ol>
-            <li><CreateAccount onNext={handleNext} visible={activeStep === 0} /></li>
+            <li> <CreateAccount onNext={handleNext} visible={activeStep === 0} /></li>
             <li> <FundIt onNext={handleNext} visible={activeStep === 1} /> </li>
             <li> <GetSol onNext={handleNext} visible={activeStep === 2} /> </li>
             <li> <InstallPhantom onNext={handleNext} visible={activeStep === 3} /> </li>

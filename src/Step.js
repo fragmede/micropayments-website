@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const Step = ({ title, children, onNext = () => {}, visible = false }) => {
+    console.log("visible " + visible);
     const [isVisible, setIsVisible] = useState(visible);
 
     useEffect(() => {

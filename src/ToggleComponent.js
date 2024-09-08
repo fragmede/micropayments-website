@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-const ToggleComponent = ({ title, children }) => {
-  const [isVisible, setIsVisible] = useState(false);
+const ToggleComponent = ({ title, children, defaultVisible = false }) => {
+  const [isVisible, setIsVisible] = useState(defaultVisible);
 
   const toggleVisibility = () => {
     setIsVisible(!isVisible);

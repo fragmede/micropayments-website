@@ -100,7 +100,7 @@ const App = () => {
           </div>
           <IntroBlurb />
           <ol>
-            <li><ToggleComponent title="Create Account">
+            <li><ToggleComponent title="Create Account" defaultVisible={true}>
               <CreateAccount />
             </ToggleComponent>
             </li>

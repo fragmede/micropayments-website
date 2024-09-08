@@ -1,6 +1,3 @@
-import React from 'react';
-import Step from './Step';
-
 import React, { Component } from 'react';
 import Step from './Step';
 

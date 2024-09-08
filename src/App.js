@@ -93,7 +93,7 @@ const App = () => {
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
-          <div style={{ padding: '20px' }}>
+          <div style={{ padding: '20px', textAlign: 'center' }}>
             <h1>Micropayments.fyi</h1>
             <CreateAccount />
             <FundIt />

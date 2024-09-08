@@ -85,9 +85,11 @@ const CRYPTO_PROD = '9m26tsxSTd8gXTwQnYPLZpac57FzCY2mCdiCBufRgpQ1'
   const handleNext = () => {
     setActiveStep((prevStep) => prevStep + 1);
   };
+  return (
     <button onClick={chargeUser} disabled={!publicKey}>
       Charge 10 cents
     </button>
+  );
   );
 };
 

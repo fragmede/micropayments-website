@@ -1,18 +1,14 @@
 import React from 'react';
 import Step from './Step';
 
-class FundIt extends Step {
-    constructor(props) {
-        console.log('fundit');
-        super(props);
-    }
-  render() {
+const FundIt = ({ onNext }) => {
+    console.log('fundit');
+
     return (
-      <Step title="Fund It">
-        <p>Funding functionality will be implemented here.</p>
-      </Step>
+        <Step title="Fund It" onNext={onNext}>
+            <p>Funding functionality will be implemented here.</p>
+        </Step>
     );
-  }
-}
+};
 
 export default FundIt;

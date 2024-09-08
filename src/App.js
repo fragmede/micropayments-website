@@ -90,7 +90,6 @@ const CRYPTO_PROD = '9m26tsxSTd8gXTwQnYPLZpac57FzCY2mCdiCBufRgpQ1'
       Charge 10 cents
     </button>
   );
-  );
 };
 
 const App = () => {

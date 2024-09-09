@@ -42,10 +42,7 @@ const App = () => {
   console.log("Current activeStep:", activeStep);
 
   const handleNext = useCallback((event) => {
-    if (activeStep > 9)
-        setActiveStep(activeStep => 9);
-    else
-        setActiveStep(activeStep => activeStep+ 1);
+        setActiveStep(activeStep => activeStep + 1);
   }, []);
 
   const handlePrev = useCallback((event) => {
@@ -92,7 +89,7 @@ const App = () => {
             <li> <WalletStatus      onNext={handleNext} onPrev={handlePrev} onSel={onSel2(6)} visible={activeStep === 6} /> </li>
             <li> <ChargeButton      onNext={handleNext} onPrev={handlePrev} onSel={onSel2(7)} visible={activeStep === 7} /> </li>
             </ol> <ul>
-            <li> <DoneMessage       onNext={handleNext} visible={activeStep === 8} /> </li>
+            <li> <DoneMessage       onNext={handleNext} onPrev={handlePrev} onSel={onSel2(8)} visible={activeStep === 8} /> </li>
             </ul>
         </WalletModalProvider>
       </WalletProvider>

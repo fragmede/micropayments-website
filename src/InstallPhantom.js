@@ -1,9 +1,9 @@
 import React from 'react';
 import Step from './Step';
 
-const InstallPhantom = ({ onNext }) => {
+const InstallPhantom = ({...props}) => {
   return (
-    <Step title="Install Phantom Wallet" onNext={onNext}>
+    <Step title="Install Phantom Wallet" {...props}>
       <p>To use this application, please install the Phantom Wallet extension.</p>
       <a href="https://phantom.app/" target="_blank" rel="noopener noreferrer">
         Install Phantom

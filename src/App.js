@@ -32,7 +32,6 @@ const config = {
 const RPC_URL = 'https://rpc-proxy.lingering-sea-b5fd.workers.dev/'
 //'https://api.mainnet-beta.solana.com'
 
-
 const App = () => {
   const endpoint = useMemo(() => RPC_URL, []);
   const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
@@ -40,9 +39,8 @@ const App = () => {
   const [activeStep, setActiveStep] = useState(0);
   console.log("Current activeStep:", activeStep);
 
-  const handleNext = useCallback((nextStep) => {
-    console.log("handleNext called with nextStep:", nextStep);
-    setActiveStep(nextStep);
+  const handleNext = useCallback((event) => {
+    setActiveStep(activeStep => activeStep+ 1);
   }, []);
 
   return (

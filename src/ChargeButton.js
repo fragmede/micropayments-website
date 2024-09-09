@@ -2,9 +2,11 @@ import React, { useCallback, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 import { Connection, PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
 
+import Step from './Step';
+
 const RPC_URL = 'https://rpc-proxy.lingering-sea-b5fd.workers.dev/';
 
-const ChargeButton = () => {
+const ChargeButton = ({...props}) => {
   const { publicKey, sendTransaction } = useWallet();
   const connection = new Connection(RPC_URL);
 
@@ -36,9 +38,11 @@ const ChargeButton = () => {
   }, [publicKey, sendTransaction, connection]);
 
   return (
-    <button onClick={chargeUser} disabled={!publicKey}>
-      Charge 10 cents
-    </button>
+    <Step title="Charge!" {...props}>
+        <button onClick={chargeUser} disabled={!publicKey}>
+          Charge 10 cents
+        </button>
+    </Step>
   );
 };
 

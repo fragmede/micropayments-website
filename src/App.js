@@ -13,13 +13,15 @@ import {
 } from '@solana/wallet-adapter-react-ui';
 import { Connection, PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
 import WalletStatus from './WalletStatus';
-import ChargeButton from './ChargeButton';
 import IntroBlurb from './IntroBlurb';
 import CreateAccount from './CreateAccount';
+import ConnectWallet from './ConnectWallet';
 import FundIt from './FundIt';
 import GetSol from './GetSol';
 import InstallPhantom from './InstallPhantom';
 import TransferToPhantom from './TransferToPhantom';
+import ChargeButton from './ChargeButton';
+import DoneMessage from './DoneMessage';
 
 
 const config = {
@@ -40,7 +42,17 @@ const App = () => {
   console.log("Current activeStep:", activeStep);
 
   const handleNext = useCallback((event) => {
-    setActiveStep(activeStep => activeStep+ 1);
+    if (activeStep > 9)
+        setActiveStep(activeStep => 9);
+    else
+        setActiveStep(activeStep => activeStep+ 1);
+  }, []);
+
+  const handlePrev = useCallback((event) => {
+    if (activeStep < 0)
+        setActiveStep(activeStep => 0);
+    else
+        setActiveStep(activeStep => activeStep - 1);
   }, []);
 
   return (
@@ -52,15 +64,17 @@ const App = () => {
           </div>
           <IntroBlurb />
           <ol>
-            <li> <CreateAccount onNext={handleNext} visible={activeStep === 0} /></li>
-            <li> <FundIt onNext={handleNext} visible={activeStep === 1} /> </li>
-            <li> <GetSol onNext={handleNext} visible={activeStep === 2} /> </li>
-            <li> <InstallPhantom onNext={handleNext} visible={activeStep === 3} /> </li>
-            <li> <TransferToPhantom onNext={handleNext} visible={activeStep === 4} /> </li>
-            <li> <WalletMultiButton onNext={handleNext} visible={activeStep === 5} /> </li>
-            <li> <WalletStatus onNext={handleNext} visible={activeStep === 6} /> </li>
-            <li> <ChargeButton onNext={handleNext} visible={activeStep === 7} /> </li>
-            </ol>
+            <li> <CreateAccount     onNext={handleNext} onPrev={handlePrev} visible={activeStep === 0} /></li>
+            <li> <FundIt            onNext={handleNext} onPrev={handlePrev} visible={activeStep === 1} /> </li>
+            <li> <GetSol            onNext={handleNext} onPrev={handlePrev} visible={activeStep === 2} /> </li>
+            <li> <InstallPhantom    onNext={handleNext} onPrev={handlePrev} visible={activeStep === 3} /> </li>
+            <li> <TransferToPhantom onNext={handleNext} onPrev={handlePrev} visible={activeStep === 4} /> </li>
+            <li> <ConnectWallet     onNext={handleNext} onPrev={handlePrev} visible={activeStep === 5} /> </li>
+            <li> <WalletStatus      onNext={handleNext} onPrev={handlePrev} visible={activeStep === 6} /> </li>
+            <li> <ChargeButton      onNext={handleNext} onPrev={handlePrev} visible={activeStep === 7} /> </li>
+            </ol> <ul>
+            <li> <DoneMessage       onNext={handleNext} visible={activeStep === 8} /> </li>
+            </ul>
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>

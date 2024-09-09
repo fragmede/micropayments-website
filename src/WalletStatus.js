@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useWallet } from '@solana/wallet-adapter-react';
 
-const WalletStatus = () => {
+import Step from './Step';
+
+const WalletStatus = ({...props}) => {
   const { connected, publicKey } = useWallet();
   const [status, setStatus] = useState('Disconnected');
 
@@ -13,7 +15,9 @@ const WalletStatus = () => {
     }
   }, [connected, publicKey]);
 
-  return <div>{status}</div>;
+  return <Step title="wallet conencted" {...props}>
+            <div>{status}</div>
+        </Step>;
 };
 
 export default WalletStatus;

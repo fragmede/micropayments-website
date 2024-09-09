@@ -1,9 +1,9 @@
 import React from 'react';
 import Step from './Step';
 
-const TransferToPhantom = ({ onNext }) => {
+const TransferToPhantom = ({...props}) => {
   return (
-    <Step title="Transfer to Phantom" onNext={onNext}>
+    <Step title="Transfer to Phantom" {...props}>
       <p>Functionality to transfer funds to the Phantom wallet will be implemented here.</p>
     </Step>
   );

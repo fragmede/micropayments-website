@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Step = ({ title, children, onNext = () => {}, visible = false }) => {
+const Step = ({ title, children, onNext = () => {}, onPrev = () => {}, visible = false, isLast = false }) => {
     console.log("visible " + visible);
     const [isVisible, setIsVisible] = useState(visible);
 
@@ -24,7 +24,9 @@ const Step = ({ title, children, onNext = () => {}, visible = false }) => {
                 <div>
                     <h2>{title}</h2>
                     {children}
-                    <button onClick={onNext}>Next</button>
+                    <button onClick={onPrev}>Prev</button>)}
+                    {!isLast && (
+                    <button onClick={onNext}>Next</button>)}
                 </div>
             )}
         </div>

@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const path = require('path');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
@@ -41,6 +42,11 @@ module.exports = {
       template: './src/index.html',
     }),
     new NodePolyfillPlugin(),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'public/assets', to: 'assets' },
+      ],
+    }),
   ],
   devServer: {
     static: {

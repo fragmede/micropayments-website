@@ -8,8 +8,8 @@ import Step from './Step';
 const ConnectWallet = ({...props}) => {
     return (
         <Step title="connect wallet" {...props}>
-            <p>go make a coinbase account.</p>
-            <p>Account creation functionality will be implemented here.</p>
+            <p>Now, click this connect wallet button.</p>
+            <p>This will connect this webpage to your wallet.</p>
             <WalletMultiButton />
         </Step>
     );

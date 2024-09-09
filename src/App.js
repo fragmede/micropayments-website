@@ -38,7 +38,7 @@ const App = () => {
   const endpoint = useMemo(() => RPC_URL, []);
   const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
 
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(-1);
   console.log("Current activeStep:", activeStep);
 
   const handleNext = useCallback((event) => {
@@ -57,17 +57,13 @@ const App = () => {
         }
   }, []);
 
-  const onSel2 = function (idx) {
-        console.log('inst '+ idx);
-
+  const onSelFunc = function (idx) {
     return () => {
-        console.log('here '+ idx);
         return onSel(idx);
     };
   }
 
   const onSel = useCallback((idx) => {
-      console.log('sel- ' + idx);
       setActiveStep(activeStep => idx);
   }, []);
 
@@ -80,16 +76,16 @@ const App = () => {
           </div>
           <IntroBlurb />
           <ol>
-            <li> <CreateAccount     onNext={handleNext} onPrev={handlePrev} onSel={onSel2(0)} visible={activeStep === 0} /></li>
-            <li> <FundIt            onNext={handleNext} onPrev={handlePrev} onSel={onSel2(1)} visible={activeStep === 1} /> </li>
-            <li> <GetSol            onNext={handleNext} onPrev={handlePrev} onSel={onSel2(2)} visible={activeStep === 2} /> </li>
-            <li> <InstallPhantom    onNext={handleNext} onPrev={handlePrev} onSel={onSel2(3)} visible={activeStep === 3} /> </li>
-            <li> <TransferToPhantom onNext={handleNext} onPrev={handlePrev} onSel={onSel2(4)} visible={activeStep === 4} /> </li>
-            <li> <ConnectWallet     onNext={handleNext} onPrev={handlePrev} onSel={onSel2(5)} visible={activeStep === 5} /> </li>
-            <li> <WalletStatus      onNext={handleNext} onPrev={handlePrev} onSel={onSel2(6)} visible={activeStep === 6} /> </li>
-            <li> <ChargeButton      onNext={handleNext} onPrev={handlePrev} onSel={onSel2(7)} visible={activeStep === 7} /> </li>
+            <li> <CreateAccount     onNext={handleNext} onPrev={handlePrev} onSel={onSelFunc(0)} visible={activeStep === 0} /></li>
+            <li> <FundIt            onNext={handleNext} onPrev={handlePrev} onSel={onSelFunc(1)} visible={activeStep === 1} /> </li>
+            <li> <GetSol            onNext={handleNext} onPrev={handlePrev} onSel={onSelFunc(2)} visible={activeStep === 2} /> </li>
+            <li> <InstallPhantom    onNext={handleNext} onPrev={handlePrev} onSel={onSelFunc(3)} visible={activeStep === 3} /> </li>
+            <li> <TransferToPhantom onNext={handleNext} onPrev={handlePrev} onSel={onSelFunc(4)} visible={activeStep === 4} /> </li>
+            <li> <ConnectWallet     onNext={handleNext} onPrev={handlePrev} onSel={onSelFunc(5)} visible={activeStep === 5} /> </li>
+            <li> <WalletStatus      onNext={handleNext} onPrev={handlePrev} onSel={onSelFunc(6)} visible={activeStep === 6} /> </li>
+            <li> <ChargeButton      onNext={handleNext} onPrev={handlePrev} onSel={onSelFunc(7)} visible={activeStep === 7} /> </li>
             </ol> <ul>
-            <li> <DoneMessage       onNext={handleNext} onPrev={handlePrev} onSel={onSel2(8)} visible={activeStep === 8} /> </li>
+            <li> <DoneMessage       onNext={handleNext} onPrev={handlePrev} onSel={onSelFunc(8)} visible={activeStep === 8} /> </li>
             </ul>
         </WalletModalProvider>
       </WalletProvider>

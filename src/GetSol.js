@@ -5,7 +5,7 @@ const GetSol = ({...props}) => {
   //console.log('get sol '+ visible);
   return (
     <Step title="Get SOL" {...props}>
-      <p>Functionality to get SOL will be implemented here.</p>
+      <p>Buy a trivial amount of Solana (SOL).</p>
     </Step>
   );
 };

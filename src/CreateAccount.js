@@ -4,8 +4,9 @@ import Step from './Step';
 const CreateAccount = ({...props}) => {
     return (
         <Step title="Create a New Account" {...props}>
-            <p>go make a coinbase account.</p>
-            <p>Account creation functionality will be implemented here.</p>
+            <p>Go to <a href="https://www.coinbase.com/">
+            <img src="/assets/coinbase-icon.ico"/>Coinbase</a> and make an account.</p>
+            <img src="/assets/coinbase.svg"/>
         </Step>
     );
 };

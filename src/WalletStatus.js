@@ -16,6 +16,7 @@ const WalletStatus = ({...props}) => {
   }, [connected, publicKey]);
 
   return <Step title="wallet conencted" {...props}>
+            <p>This should now say some gibberish that represents your wallet as having been connected:</p>
             <div>{status}</div>
         </Step>;
 };

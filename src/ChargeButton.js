@@ -39,6 +39,7 @@ const ChargeButton = ({...props}) => {
 
   return (
     <Step title="Charge!" {...props}>
+        <p>Now, this button should be enabled, and when you click it, it'll pop up and say ARE YOU SURE? and then you say yes, and I'm now, 10 cents richer, and you're 10 cents poorer.</p>
         <button onClick={chargeUser} disabled={!publicKey}>
           Charge 10 cents
         </button>

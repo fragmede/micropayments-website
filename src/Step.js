@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Step = ({ title, children, onNext = () => {}, onPrev = () => {}, visible = false, isLast = false }) => {
+const Step = ({ title, children, onNext = () => {}, onPrev = () => {}, onSel = () => {}, visible = false, isLast = false }) => {
     console.log("visible " + visible);
     const [isVisible, setIsVisible] = useState(visible);
 
@@ -9,6 +9,9 @@ const Step = ({ title, children, onNext = () => {}, onPrev = () => {}, visible =
     }, [visible]);
 
     const toggleVisibility = () => {
+        
+        console.log('onsel '  );
+        onSel();
         setIsVisible((prev) => !prev);
     };
 
@@ -24,7 +27,8 @@ const Step = ({ title, children, onNext = () => {}, onPrev = () => {}, visible =
                 <div>
                     <h2>{title}</h2>
                     {children}
-                    <button onClick={onPrev}>Prev</button>)}
+
+                    <button onClick={onPrev}>Prev</button>
                     {!isLast && (
                     <button onClick={onNext}>Next</button>)}
                 </div>

@@ -49,10 +49,29 @@ const App = () => {
   }, []);
 
   const handlePrev = useCallback((event) => {
-    if (activeStep < 0)
+  console.log("wtf2:", activeStep);
+    if (activeStep < 0) {
+  console.log("wtf:", activeStep);
         setActiveStep(activeStep => 0);
-    else
+        }
+    else{
         setActiveStep(activeStep => activeStep - 1);
+  console.log("wtf3:", activeStep);
+        }
+  }, []);
+
+  const onSel2 = function (idx) {
+        console.log('inst '+ idx);
+
+    return () => {
+        console.log('here '+ idx);
+        return onSel(idx);
+    };
+  }
+
+  const onSel = useCallback((idx) => {
+      console.log('sel- ' + idx);
+      setActiveStep(activeStep => idx);
   }, []);
 
   return (
@@ -64,14 +83,14 @@ const App = () => {
           </div>
           <IntroBlurb />
           <ol>
-            <li> <CreateAccount     onNext={handleNext} onPrev={handlePrev} visible={activeStep === 0} /></li>
-            <li> <FundIt            onNext={handleNext} onPrev={handlePrev} visible={activeStep === 1} /> </li>
-            <li> <GetSol            onNext={handleNext} onPrev={handlePrev} visible={activeStep === 2} /> </li>
-            <li> <InstallPhantom    onNext={handleNext} onPrev={handlePrev} visible={activeStep === 3} /> </li>
-            <li> <TransferToPhantom onNext={handleNext} onPrev={handlePrev} visible={activeStep === 4} /> </li>
-            <li> <ConnectWallet     onNext={handleNext} onPrev={handlePrev} visible={activeStep === 5} /> </li>
-            <li> <WalletStatus      onNext={handleNext} onPrev={handlePrev} visible={activeStep === 6} /> </li>
-            <li> <ChargeButton      onNext={handleNext} onPrev={handlePrev} visible={activeStep === 7} /> </li>
+            <li> <CreateAccount     onNext={handleNext} onPrev={handlePrev} onSel={onSel2(0)} visible={activeStep === 0} /></li>
+            <li> <FundIt            onNext={handleNext} onPrev={handlePrev} onSel={onSel2(1)} visible={activeStep === 1} /> </li>
+            <li> <GetSol            onNext={handleNext} onPrev={handlePrev} onSel={onSel2(2)} visible={activeStep === 2} /> </li>
+            <li> <InstallPhantom    onNext={handleNext} onPrev={handlePrev} onSel={onSel2(3)} visible={activeStep === 3} /> </li>
+            <li> <TransferToPhantom onNext={handleNext} onPrev={handlePrev} onSel={onSel2(4)} visible={activeStep === 4} /> </li>
+            <li> <ConnectWallet     onNext={handleNext} onPrev={handlePrev} onSel={onSel2(5)} visible={activeStep === 5} /> </li>
+            <li> <WalletStatus      onNext={handleNext} onPrev={handlePrev} onSel={onSel2(6)} visible={activeStep === 6} /> </li>
+            <li> <ChargeButton      onNext={handleNext} onPrev={handlePrev} onSel={onSel2(7)} visible={activeStep === 7} /> </li>
             </ol> <ul>
             <li> <DoneMessage       onNext={handleNext} visible={activeStep === 8} /> </li>
             </ul>

@@ -9,10 +9,11 @@ const RPC_URL = 'https://rpc-proxy.lingering-sea-b5fd.workers.dev/';
 const ChargeButton = ({...props}) => {
   const { publicKey, sendTransaction } = useWallet();
   const connection = new Connection(RPC_URL);
+  const [status, setStatus] = useState('');
 
   const chargeUser = useCallback(async () => {
     if (!publicKey) {
-      console.log('Wallet not connected');
+      setStatus('Error: Wallet not connected');
       return;
     }
 
@@ -29,20 +30,26 @@ const ChargeButton = ({...props}) => {
     );
 
     try {
+      setStatus('Processing transaction...');
       const signature = await sendTransaction(transaction, connection);
       await connection.confirmTransaction(signature, 'confirmed');
-      console.log('Transaction successful:', signature);
+      setStatus('Transaction successful! Signature: ' + signature);
     } catch (error) {
-      console.error('Transaction failed:', error);
+      setStatus('Transaction failed: ' + error.message);
     }
   }, [publicKey, sendTransaction, connection]);
 
   return (
-    <Step title="Charge!" {...props}>
-        <p>Now, this button should be enabled, and when you click it, it'll pop up and say ARE YOU SURE? and then you say yes, and I'm now, 10 cents richer, and you're 10 cents poorer.</p>
-        <button onClick={chargeUser} disabled={!publicKey}>
-          Charge 10 cents
-        </button>
+    <Step title="Make Your Micropayment" {...props}>
+      <p>You're all set! Click the button below to make a $0.10 USD micropayment.</p>
+      <button 
+        onClick={chargeUser} 
+        disabled={!publicKey}
+        className="charge-button"
+      >
+        Pay $0.10
+      </button>
+      {status && <p className="transaction-status">{status}</p>}
     </Step>
   );
 };

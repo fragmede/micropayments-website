@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
 const Step = ({ title, children, onNext = () => {}, onPrev = () => {}, onSel = () => {}, visible = false, isLast = false }) => {
-    console.log("visible " + visible);
     const [isVisible, setIsVisible] = useState(visible);
 
     useEffect(() => {
@@ -9,28 +8,32 @@ const Step = ({ title, children, onNext = () => {}, onPrev = () => {}, onSel = (
     }, [visible]);
 
     const toggleVisibility = () => {
-        
-        console.log('onsel '  );
         onSel();
         setIsVisible((prev) => !prev);
     };
 
     return (
-        <div>
-            <div onClick={toggleVisibility} style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
-                <span style={{ transform: isVisible ? 'rotate(90deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+        <div className="step">
+            <div 
+                onClick={toggleVisibility} 
+                className="step-header"
+                role="button"
+                aria-expanded={isVisible}
+                tabIndex={0}
+                onKeyPress={(e) => e.key === 'Enter' && toggleVisibility()}
+            >
+                <span className={`step-arrow ${isVisible ? 'expanded' : ''}`}>
                     ▶
                 </span>
-                <span style={{ marginLeft: '5px' }}>{title}</span>
+                <h3 className="step-title">{title}</h3>
             </div>
             {isVisible && (
-                <div>
-                    <h2>{title}</h2>
+                <div className="step-content">
                     {children}
-
-                    <button onClick={onPrev}>Prev</button>
-                    {!isLast && (
-                    <button onClick={onNext}>Next</button>)}
+                    <div className="step-buttons">
+                        <button onClick={onPrev} className="btn btn-secondary">Previous</button>
+                        {!isLast && <button onClick={onNext} className="btn btn-primary">Next</button>}
+                    </div>
                 </div>
             )}
         </div>

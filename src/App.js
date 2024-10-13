@@ -1,17 +1,14 @@
-import React, { useMemo, useEffect, useState, useCallback } from 'react';
+import React, { useMemo, useState, useCallback } from 'react';
 import {
   ConnectionProvider,
   WalletProvider,
-  useWallet
 } from '@solana/wallet-adapter-react';
 import {
   PhantomWalletAdapter
 } from '@solana/wallet-adapter-wallets';
 import {
   WalletModalProvider,
-  WalletMultiButton
 } from '@solana/wallet-adapter-react-ui';
-import { Connection, PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
 import WalletStatus from './WalletStatus';
 import IntroBlurb from './IntroBlurb';
 import CreateAccount from './CreateAccount';
@@ -23,70 +20,67 @@ import TransferToPhantom from './TransferToPhantom';
 import ChargeButton from './ChargeButton';
 import DoneMessage from './DoneMessage';
 
-
-const config = {
-    encoding: "jsonParsed",
-    transactionDetails: "full",
-    rewards: false,
-    maxSupportedTransactionVersion: 0,
-}
-
-const RPC_URL = 'https://rpc-proxy.lingering-sea-b5fd.workers.dev/'
-//'https://api.mainnet-beta.solana.com'
+const RPC_URL = 'https://rpc-proxy.lingering-sea-b5fd.workers.dev/';
 
 const App = () => {
   const endpoint = useMemo(() => RPC_URL, []);
   const wallets = useMemo(() => [new PhantomWalletAdapter()], []);
 
   const [activeStep, setActiveStep] = useState(-1);
-  console.log("Current activeStep:", activeStep);
 
-  const handleNext = useCallback((event) => {
-        setActiveStep(activeStep => activeStep + 1);
+  const handleNext = useCallback(() => {
+    setActiveStep(prevStep => prevStep + 1);
   }, []);
 
-  const handlePrev = useCallback((event) => {
-  console.log("wtf2:", activeStep);
-    if (activeStep < 0) {
-  console.log("wtf:", activeStep);
-        setActiveStep(activeStep => 0);
-        }
-    else{
-        setActiveStep(activeStep => activeStep - 1);
-  console.log("wtf3:", activeStep);
-        }
+  const handlePrev = useCallback(() => {
+    setActiveStep(prevStep => Math.max(prevStep - 1, 0));
   }, []);
 
-  const onSelFunc = function (idx) {
-    return () => {
-        return onSel(idx);
-    };
-  }
+  const onSelFunc = useCallback((idx) => () => setActiveStep(idx), []);
 
-  const onSel = useCallback((idx) => {
-      setActiveStep(activeStep => idx);
-  }, []);
+  const steps = [
+    { component: CreateAccount, title: "Create Account" },
+    { component: FundIt, title: "Fund Account" },
+    { component: GetSol, title: "Get SOL" },
+    { component: InstallPhantom, title: "Install Phantom" },
+    { component: TransferToPhantom, title: "Transfer to Phantom" },
+    { component: ConnectWallet, title: "Connect Wallet" },
+    { component: WalletStatus, title: "Wallet Status" },
+    { component: ChargeButton, title: "Make Payment" },
+    { component: DoneMessage, title: "Complete" },
+  ];
+
+  const progress = ((activeStep + 1) / steps.length) * 100;
 
   return (
     <ConnectionProvider endpoint={endpoint}>
       <WalletProvider wallets={wallets} autoConnect>
         <WalletModalProvider>
-          <div style={{ padding: '20px', textAlign: 'center', fontFamily: '"Courier New", Courier, monospace' }}>
-            <h1>Micropayments.fyi</h1>
+          <div className="app-container">
+            <header>
+              <h1>Micropayments.fyi</h1>
+            </header>
+            <IntroBlurb />
+            <div className="progress-bar">
+              <div className="progress" style={{ width: `${progress}%` }}></div>
+            </div>
+            <ol className="steps-list">
+              {steps.map((step, index) => {
+                const StepComponent = step.component;
+                return (
+                  <li key={index}>
+                    <StepComponent
+                      onNext={handleNext}
+                      onPrev={handlePrev}
+                      onSel={onSelFunc(index)}
+                      visible={activeStep === index}
+                      isLast={index === steps.length - 1}
+                    />
+                  </li>
+                );
+              })}
+            </ol>
           </div>
-          <IntroBlurb />
-          <ol>
-            <li> <CreateAccount     onNext={handleNext} onPrev={handlePrev} onSel={onSelFunc(0)} visible={activeStep === 0} /></li>
-            <li> <FundIt            onNext={handleNext} onPrev={handlePrev} onSel={onSelFunc(1)} visible={activeStep === 1} /> </li>
-            <li> <GetSol            onNext={handleNext} onPrev={handlePrev} onSel={onSelFunc(2)} visible={activeStep === 2} /> </li>
-            <li> <InstallPhantom    onNext={handleNext} onPrev={handlePrev} onSel={onSelFunc(3)} visible={activeStep === 3} /> </li>
-            <li> <TransferToPhantom onNext={handleNext} onPrev={handlePrev} onSel={onSelFunc(4)} visible={activeStep === 4} /> </li>
-            <li> <ConnectWallet     onNext={handleNext} onPrev={handlePrev} onSel={onSelFunc(5)} visible={activeStep === 5} /> </li>
-            <li> <WalletStatus      onNext={handleNext} onPrev={handlePrev} onSel={onSelFunc(6)} visible={activeStep === 6} /> </li>
-            <li> <ChargeButton      onNext={handleNext} onPrev={handlePrev} onSel={onSelFunc(7)} visible={activeStep === 7} /> </li>
-            </ol> <ul>
-            <li> <DoneMessage       onNext={handleNext} onPrev={handlePrev} onSel={onSelFunc(8)} visible={activeStep === 8} /> </li>
-            </ul>
         </WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>

@@ -8,7 +8,7 @@ const CreateAccount = ({...props}) => {
             <p>Follow these steps to create your account:</p>
             <ol>
                 <li>🖱️ Click on the Coinbase logo below to visit their website.</li>
-                <li>🚀 Click the "Get started" button on the Coinbase homepage.</li>
+                <li>🚀 Click the "Sign up" button on the Coinbase homepage.</li>
                 <li>📝 Enter your name and email address.</li>
                 <li>🔐 Create a strong, unique password for your account.</li>
                 <li>📧 Check your email inbox and click the verification link from Coinbase.</li>

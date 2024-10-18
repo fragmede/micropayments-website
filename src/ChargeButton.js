@@ -41,7 +41,8 @@ const ChargeButton = ({...props}) => {
 
   return (
     <Step title="Make Your Micropayment" {...props}>
-      <p>You're all set! Click the button below to make a $0.10 USD micropayment.</p>
+      <p>You're all set! Click the button below to make a $0.10 USD micropayment donation to me, say for making this website.</p>
+      <p>Offer void where prohibited, all sales final, no warranty expressed or implied.</p>
       <button 
         onClick={chargeUser} 
         disabled={!publicKey}

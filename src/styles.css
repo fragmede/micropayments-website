@@ -14,21 +14,6 @@ body {
 .app-container {
   position: relative;
   overflow: hidden;
-}
-
-.app-container::before {
-  content: '';
-  position: absolute;
-  top: -50px;
-  left: -50px;
-  right: -50px;
-  bottom: -50px;
-  background: url('path/to/your/pattern.svg') repeat;
-  opacity: 0.1;
-  z-index: -1;
-}
-
-.app-container {
   background-color: rgba(249, 249, 249, 0.9);
   border-radius: 8px;
   padding: 20px;

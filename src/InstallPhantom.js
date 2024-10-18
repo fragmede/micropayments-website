@@ -17,6 +17,7 @@ const InstallPhantom = ({...props}) => {
       </ol>
       <p>Important: Never share your secret recovery phrase or password with anyone. Phantom will never ask for this information.</p>
       <p>After setting up your Phantom wallet, you're ready to transfer your SOL from Coinbase in the next step!</p>
+      <p>Note: Phantom also works on mobile devices! You can download the Phantom app from the App Store (iOS) or Google Play Store (Android) if you prefer using your smartphone.</p>
     </Step>
   );
 };

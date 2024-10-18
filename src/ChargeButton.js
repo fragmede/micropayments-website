@@ -10,6 +10,7 @@ const ChargeButton = ({...props}) => {
   const { publicKey, sendTransaction } = useWallet();
   const connection = new Connection(RPC_URL);
   const [status, setStatus] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
 
   const chargeUser = useCallback(async () => {
     if (!publicKey) {
@@ -34,10 +35,15 @@ const ChargeButton = ({...props}) => {
       const signature = await sendTransaction(transaction, connection);
       await connection.confirmTransaction(signature, 'confirmed');
       setStatus('Transaction successful! Signature: ' + signature);
+      setShowPopup(true);
     } catch (error) {
       setStatus('Transaction failed: ' + error.message);
     }
   }, [publicKey, sendTransaction, connection]);
+
+  const closePopup = () => {
+    setShowPopup(false);
+  };
 
   return (
     <Step title="Make Your Micropayment" {...props}>
@@ -51,6 +57,16 @@ const ChargeButton = ({...props}) => {
         Pay $0.10
       </button>
       {status && <p className="transaction-status">{status}</p>}
+      {showPopup && (
+        <div className="popup">
+          <div className="popup-content">
+            <h2>🎉 Payment Successful! 🎉</h2>
+            <p>Thank you for your micropayment of $0.10 USD!</p>
+            <p>Your support helps us continue to provide valuable content and services.</p>
+            <button onClick={closePopup}>Close</button>
+          </div>
+        </div>
+      )}
     </Step>
   );
 };

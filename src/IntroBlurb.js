@@ -3,8 +3,7 @@ import React from 'react';
 const IntroBlurb = () => {
   return (
     <div className="intro-blurb">
-      <h2>🚀 Welcome to Micropayments.fyi!</h2>
-      <h2>Ready to explore a new way of making small payments online? 🎉</h2>
+      <h2>Ready to explore a new way of making small payments online?🎉</h2>
       <p>Join us on an exciting journey as we show you how to make a tiny $0.10 USD payment using new technology!</p>
       <p>Our step-by-step guide will walk you through:</p>
       <ul>

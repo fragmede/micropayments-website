@@ -3,23 +3,23 @@ import Step from './Step';
 
 const GetSol = ({...props}) => {
   return (
-    <Step title="Purchase Solana (SOL)" {...props}>
-      <p>Now that your Coinbase account is funded, it's time to purchase a small amount of Solana (SOL). Here's how to do it:</p>
+    <Step title="🌞 Catch Some SOL(ana)!" {...props}>
+      <p>Alright, crypto-astronaut! Your Coinbase rocket is fueled up. Now it's time to grab some Solana (SOL) - it's like cosmic currency! Here's your mission:</p>
       <ol>
-        <li>Log in to your Coinbase account.</li>
-        <li>Click on "Buy/Sell" at the top of the page.</li>
-        <li>Select "Buy" and choose Solana (SOL) from the list of cryptocurrencies.</li>
-        <li>Enter the amount you want to buy. For this tutorial, we recommend purchasing about $5 worth of SOL.</li>
-        <li>Review the transaction details, including the fees.</li>
-        <li>Confirm your purchase.</li>
+        <li>🔑 Unlock your Coinbase command center (log in).</li>
+        <li>🎯 Spot and click the "Buy/Sell" button. It's your launchpad!</li>
+        <li>🔍 Select "Buy" and find Solana (SOL) in the crypto constellation.</li>
+        <li>💸 Decide how much SOL-ar power you want. We suggest $5 worth - it's not much, but it's honest work!</li>
+        <li>🕵️‍♂️ Review the details like you're checking for alien imposters.</li>
+        <li>🚀 Hit that confirm button and blast off into the SOLar system!</li>
       </ol>
-      <p>Important notes:</p>
+      <p>⚠️ Cosmic Cautions:</p>
       <ul>
-        <li>The price of SOL fluctuates, so the exact amount you receive may vary slightly.</li>
-        <li>Coinbase charges a small fee for cryptocurrency purchases. This will be included in the transaction details.</li>
-        <li>After confirming your purchase, it may take a few minutes for the SOL to appear in your Coinbase account.</li>
+        <li>🎢 SOL prices are on a rollercoaster - your $5 might buy a different amount of SOL tokens each time. It's crypto magic! ✨</li>
+        <li>🍟 Coinbase takes a small side of fees with your order. They gotta fuel their own rockets somehow!</li>
+        <li>⏳ After you've made your purchase, your SOL might take a quick space nap before appearing in your account. Don't panic!</li>
       </ul>
-      <p>Once you've successfully purchased SOL, you're ready to move on to the next step: installing the Phantom wallet!</p>
+      <p>Once you've snagged your SOL, you're ready for the next giant leap: summoning the Phantom wallet! 👻🌠</p>
     </Step>
   );
 };

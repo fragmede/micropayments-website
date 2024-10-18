@@ -18,7 +18,7 @@ const ChargeButton = ({...props}) => {
     }
 
     const CRYPTO_TEST = 'GXmQ9JRpefccTssu3yhMmRVmXSJ7JEQa78pp9xQnsM78';
-    const lamports = 400000; // 0.004 SOL = 40000000 lamports ~= $.10 USD 2024.07.03
+    const lamports = 650000; // 0.0006 SOL = 650000 lamports ~= $.10 USD; 1 SOL is $153.64 USD 2024.10.18
 
     const recipient = new PublicKey(CRYPTO_TEST);
     const transaction = new Transaction().add(

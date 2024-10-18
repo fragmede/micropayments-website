@@ -3,8 +3,8 @@ import React from 'react';
 const IntroBlurb = () => {
   return (
     <div className="intro-blurb">
-      <h2>🚀 Welcome to Micropayments.fyi! 🎉</h2>
-      <p>Ready to dive into the future of pocket change? Buckle up for a wild ride through the Solana blockchain as we show you how to make a tiny-but-mighty $0.10 USD micropayment!</p>
+      <h2>🚀 Welcome to Micropayments.fyi! Ready to dive into the future of pocket change? 🎉</h2>
+      <p>Buckle up for a wild ride through the Solana blockchain as we show you how to make a tiny-but-mighty $0.10 USD micropayment!</p>
       <p>Our fun-filled adventure will guide you through:</p>
       <ul>
         <li>🏦 Setting up your very own Coinbase treasure chest</li>

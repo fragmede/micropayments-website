@@ -12,6 +12,23 @@ body {
 }
 
 .app-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.app-container::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  left: -50px;
+  right: -50px;
+  bottom: -50px;
+  background: url('path/to/your/pattern.svg') repeat;
+  opacity: 0.1;
+  z-index: -1;
+}
+
+.app-container {
   background-color: rgba(249, 249, 249, 0.9);
   border-radius: 8px;
   padding: 20px;
@@ -160,4 +177,27 @@ h1 {
   padding: 10px;
   background-color: #f1f8e9;
   border-left: 5px solid #4caf50;
+}
+
+.floating-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.progress-bar {
+  height: 5px;
+  background-color: #3498db;
+  transition: width 0.5s ease-in-out;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.floating-icon {
+  animation: float 3s ease-in-out infinite;
 }

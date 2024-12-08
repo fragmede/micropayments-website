@@ -16,14 +16,19 @@ const DoneMessage = ({...props}) => {
                 <li>Made a micropayment on the Solana blockchain</li>
             </ul>
             <h4>What's next?</h4>
-            <p>Now that you're familiar with the basics of Solana micropayments, here are some ideas for further exploration:</p>
+
+            <p>Question is, how do you get this button on your web page?
+            It's unfortunately a rather involved process, but the source code for this website is available on <a href="https://github.com/fragmede/micropayments-website">github. </a>
+            </p>
+
+
             <ul>
-                <li>Learn more about Solana and its ecosystem at <a href="https://solana.com/" target="_blank" rel="noopener noreferrer">solana.com</a></li>
-                <li>Explore other Solana-based applications and services</li>
-                <li>Consider building your own dApp using Solana's developer resources</li>
-                <li>Stay informed about developments in the world of cryptocurrency and blockchain technology</li>
             </ul>
             <p>Thank you for completing this tutorial. We hope you found it informative and enjoyable!</p>
+
+
+            
+
         </Step>
     );
 };

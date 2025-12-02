@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack serve --mode development",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "deploy": "npm run build && CLOUDFLARE_ACCOUNT_ID=48703c6652a6b0977126061a9f99e7cb wrangler pages deploy"
   },
   "keywords": [],
   "author": "",

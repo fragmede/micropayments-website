@@ -5,7 +5,7 @@ const IntroBlurb = () => {
     <div className="intro-blurb">
       <h2>Alright, Internet, you want micropayments?</h2>
       <p>This is how it could work.</p>
-      <p>Follow this eight step guide, and give me 10 cents.</p>
+      <p>Follow this nine step guide, and give me 10 cents.</p>
       <p>Our step-by-step guide will walk you through:</p>
       <ul>
         <li>🏦 Setting up a digital account to handle your funds</li>

@@ -13,6 +13,7 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 # Runtime data
 node_modules/
 dist/
+.wrangler/
 pids
 *.pid
 *.seed

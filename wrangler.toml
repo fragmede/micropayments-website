@@ -6,4 +6,3 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 X402_NETWORK_MODE = "testnet"
 X402_PRICE = "$0.01"
-X402_SVM_PAY_TO = "GXmQ9JRpefccTssu3yhMmRVmXSJ7JEQa78pp9xQnsM78"

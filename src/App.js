@@ -1,22 +1,82 @@
 import React, { useEffect, useState } from "react";
 
 const STATUS_ENDPOINT = "/api/x402/status";
-const PAID_ENDPOINT = "/api/x402/brief";
+const ANSWER_ENDPOINT = "/api/x402/answer";
 
 const fallbackStatus = {
   accepts: [
     {
-      network: "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",
-      payTo: "GXmQ9J...sM78",
+      network: "eip155:84532",
+      payTo: "0x0000...dEaD",
       scheme: "exact",
     },
   ],
-  endpoint: PAID_ENDPOINT,
+  answerEndpoint: ANSWER_ENDPOINT,
+  baseNetwork: "Base Sepolia",
+  configured: true,
   facilitatorHost: "x402.org",
   mode: "testnet",
   price: "$0.01",
   testnet: true,
 };
+
+const steps = [
+  {
+    title: "Pick a Base-capable wallet",
+    kicker: "Wallet",
+    body:
+      "Use Coinbase Wallet, MetaMask, Rabby, or another EVM wallet that can switch to Base. Unlock it before you start the payment step.",
+    checks: [
+      "You can see the wallet extension or mobile app.",
+      "You control the wallet and recovery phrase.",
+      "The wallet can connect to websites.",
+    ],
+  },
+  {
+    title: "Switch the wallet to Base",
+    kicker: "Network",
+    body:
+      "Select the Base network shown in the payment panel below. Testnet mode uses Base Sepolia; production mode uses Base mainnet.",
+    checks: [
+      "Base mainnet chain id is 8453.",
+      "Base Sepolia chain id is 84532.",
+      "The active network matches the payment panel below.",
+    ],
+  },
+  {
+    title: "Keep a little ETH for gas",
+    kicker: "Gas",
+    body:
+      "Base payments settle in USDC, but the wallet still needs a small ETH balance on the same Base network to submit transactions.",
+    checks: [
+      "ETH is on Base, not Ethereum mainnet.",
+      "A few cents of ETH is enough for this kind of test.",
+      "The wallet balance view shows the selected Base network.",
+    ],
+  },
+  {
+    title: "Add USDC on Base",
+    kicker: "Funds",
+    body:
+      "The x402 exact scheme prices this answer at one cent in USDC. Bridge, receive, or faucet the right USDC for the active Base network.",
+    checks: [
+      "The USDC asset is on the same network as the payment request.",
+      "You have at least $0.01 available.",
+      "The payment request is for an exact amount.",
+    ],
+  },
+  {
+    title: "Read the HTTP 402 terms",
+    kicker: "x402",
+    body:
+      "Before paying, inspect the protected route. The server should answer with HTTP 402 and a machine-readable PAYMENT-REQUIRED header.",
+    checks: [
+      "The route is /api/x402/answer.",
+      "The scheme is exact.",
+      "The advertised network starts with eip155 for Base.",
+    ],
+  },
+];
 
 const decodePaymentHeader = (header) => {
   const decoded = window.atob(header);
@@ -25,13 +85,14 @@ const decodePaymentHeader = (header) => {
 
 const formatNetworks = (accepts = []) => {
   if (!accepts.length) {
-    return "Waiting for endpoint";
+    return "Not configured";
   }
 
   return accepts.map((accept) => accept.network).join(", ");
 };
 
 const App = () => {
+  const [activeStep, setActiveStep] = useState(0);
   const [status, setStatus] = useState(fallbackStatus);
   const [statusState, setStatusState] = useState("loading");
   const [probeState, setProbeState] = useState("idle");
@@ -52,7 +113,7 @@ const App = () => {
       .then((payload) => {
         if (isCurrent) {
           setStatus(payload);
-          setStatusState("ready");
+          setStatusState(payload.configured ? "ready" : "needs receiver");
         }
       })
       .catch((error) => {
@@ -73,7 +134,7 @@ const App = () => {
     setPaymentRequired(null);
 
     try {
-      const response = await fetch(PAID_ENDPOINT, {
+      const response = await fetch(ANSWER_ENDPOINT, {
         headers: {
           Accept: "application/json",
         },
@@ -86,69 +147,68 @@ const App = () => {
 
       setPaymentRequired(decodePaymentHeader(header));
       setProbeState("ready");
+      setActiveStep(steps.length);
     } catch (error) {
       setProbeState("error");
       setProbeError(error.message);
     }
   };
 
+  const goToNextStep = () => {
+    setActiveStep((currentStep) => Math.min(currentStep + 1, steps.length));
+  };
+
+  const goToPreviousStep = () => {
+    setActiveStep((currentStep) => Math.max(currentStep - 1, 0));
+  };
+
+  const currentStep = steps[activeStep];
+  const progress = Math.round(((activeStep + 1) / (steps.length + 1)) * 100);
+
   return (
     <main className="app-shell">
-      <section className="hero-panel" aria-labelledby="page-title">
+      <section className="intro-grid" aria-labelledby="page-title">
         <div className="hero-copy">
           <p className="brand">Micropayments.fyi</p>
-          <p className="eyebrow">HTTP-native payments</p>
-          <h1 id="page-title">x402 payments over HTTP.</h1>
+          <p className="eyebrow">Base setup walkthrough</p>
+          <h1 id="page-title">Pay one cent for a bad joke.</h1>
           <p className="lede">
-            This site exposes a real paid resource over HTTP 402. Agents see
-            machine-readable payment requirements. People get the x402 wallet
-            paywall before the content is served.
+            Set up a Base wallet, check the x402 payment terms, then pay{" "}
+            {status.price} to reveal the answer to a deliberately lame
+            two-part joke.
           </p>
-          <div className="action-row" aria-label="x402 actions">
-            <a className="button primary" href={PAID_ENDPOINT}>
-              Open paid brief
-            </a>
-            <button
-              className="button secondary"
-              disabled={probeState === "loading"}
-              onClick={inspectPaymentRequirement}
-              type="button"
-            >
-              {probeState === "loading" ? "Inspecting" : "Inspect 402"}
-            </button>
-          </div>
         </div>
 
-        <div className="protocol-visual" aria-label="x402 request flow">
-          <div className="flow-node client">
-            <span>Client</span>
-            <strong>GET {status.endpoint}</strong>
-          </div>
-          <div className="flow-arrow">402</div>
-          <div className="flow-node server">
-            <span>Resource server</span>
-            <strong>PAYMENT-REQUIRED</strong>
-          </div>
-          <div className="flow-arrow">pay</div>
-          <div className="flow-node unlock">
-            <span>Unlocked response</span>
-            <strong>PAYMENT-RESPONSE</strong>
-          </div>
-        </div>
+        <aside className="joke-card" aria-label="Joke prompt">
+          <img className="base-mark" src="/assets/base-mark.svg" alt="Base" />
+          <p className="eyebrow">Question</p>
+          <h2>What&apos;s red and bad for your teeth?</h2>
+          <p>
+            The answer is behind an x402 payment on Base. The follow-up answer
+            is included after the payment clears.
+          </p>
+          <a
+            className={`button primary ${status.configured ? "" : "disabled"}`}
+            href={status.configured ? ANSWER_ENDPOINT : undefined}
+            aria-disabled={!status.configured}
+          >
+            Pay {status.price} for answer
+          </a>
+        </aside>
       </section>
 
       <section className="status-grid" aria-label="x402 endpoint status">
+        <article>
+          <span>Network</span>
+          <strong>{status.baseNetwork}</strong>
+        </article>
         <article>
           <span>Price</span>
           <strong>{status.price}</strong>
         </article>
         <article>
-          <span>Mode</span>
-          <strong>{status.mode}</strong>
-        </article>
-        <article>
-          <span>Facilitator</span>
-          <strong>{status.facilitatorHost}</strong>
+          <span>Endpoint</span>
+          <strong>{status.answerEndpoint}</strong>
         </article>
         <article>
           <span>Status</span>
@@ -156,11 +216,96 @@ const App = () => {
         </article>
       </section>
 
+      <section className="walkthrough" aria-label="Base setup steps">
+        <nav className="step-list" aria-label="Setup progress">
+          {[...steps, { kicker: "Pay", title: "Reveal the answer" }].map(
+            (step, index) => (
+              <button
+                className={index === activeStep ? "active" : ""}
+                key={step.title}
+                onClick={() => setActiveStep(index)}
+                type="button"
+              >
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                {step.kicker}
+              </button>
+            ),
+          )}
+        </nav>
+
+        <div className="step-panel">
+          <div className="progress-track" aria-label={`${progress}% complete`}>
+            <span style={{ width: `${progress}%` }} />
+          </div>
+
+          {currentStep ? (
+            <article className="setup-step">
+              <p className="eyebrow">{currentStep.kicker}</p>
+              <h2>{currentStep.title}</h2>
+              <p>{currentStep.body}</p>
+              <ul>
+                {currentStep.checks.map((check) => (
+                  <li key={check}>{check}</li>
+                ))}
+              </ul>
+            </article>
+          ) : (
+            <article className="setup-step answer-step">
+              <p className="eyebrow">Final step</p>
+              <h2>Ask x402 for the punchline.</h2>
+              <p>
+                The browser paywall opens when you request the answer. The
+                inspect button shows the same HTTP 402 terms without sending a
+                payment.
+              </p>
+              <div className="action-row" aria-label="Answer actions">
+                <a
+                  className={`button primary ${
+                    status.configured ? "" : "disabled"
+                  }`}
+                  href={status.configured ? ANSWER_ENDPOINT : undefined}
+                  aria-disabled={!status.configured}
+                >
+                  Pay {status.price} for answer
+                </a>
+                <button
+                  className="button secondary"
+                  disabled={probeState === "loading" || !status.configured}
+                  onClick={inspectPaymentRequirement}
+                  type="button"
+                >
+                  {probeState === "loading" ? "Inspecting" : "Inspect 402"}
+                </button>
+              </div>
+            </article>
+          )}
+
+          <div className="step-controls">
+            <button
+              className="button secondary"
+              disabled={activeStep === 0}
+              onClick={goToPreviousStep}
+              type="button"
+            >
+              Previous
+            </button>
+            <button
+              className="button secondary"
+              disabled={activeStep === steps.length}
+              onClick={goToNextStep}
+              type="button"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      </section>
+
       <section className="workbench">
         <div className="panel">
           <div className="section-heading">
-            <p className="eyebrow">Endpoint contract</p>
-            <h2>{status.endpoint}</h2>
+            <p className="eyebrow">Payment route</p>
+            <h2>{status.answerEndpoint}</h2>
           </div>
           <div className="contract-list">
             <div>
@@ -168,12 +313,18 @@ const App = () => {
               <strong>exact</strong>
             </div>
             <div>
-              <span>Networks</span>
+              <span>Network</span>
               <strong>{formatNetworks(status.accepts)}</strong>
             </div>
             <div>
               <span>Receiver</span>
-              <strong>{status.accepts?.[0]?.payTo || "configured in Worker env"}</strong>
+              <strong>
+                {status.accepts?.[0]?.payTo || "Set X402_EVM_PAY_TO"}
+              </strong>
+            </div>
+            <div>
+              <span>Facilitator</span>
+              <strong>{status.facilitatorHost}</strong>
             </div>
           </div>
         </div>
@@ -199,25 +350,11 @@ const App = () => {
             <div className="empty-state">
               <strong>{probeError || "No probe has run yet."}</strong>
               <span>
-                Use the inspect action to fetch the protected resource without a
-                payment signature and decode the returned x402 requirements.
+                Inspect the final step to decode the x402 terms before paying.
               </span>
             </div>
           )}
         </div>
-      </section>
-
-      <section className="notes-band" aria-label="Implementation notes">
-        <div>
-          <p className="eyebrow">What changed</p>
-          <h2>The payment is no longer a custom wallet transfer.</h2>
-        </div>
-        <p>
-          The paid route is protected at the Cloudflare edge by x402 middleware.
-          Unpaid requests receive HTTP 402 plus payment terms. Paid retries are
-          verified and settled through a facilitator before the HTML brief is
-          returned.
-        </p>
       </section>
     </main>
   );

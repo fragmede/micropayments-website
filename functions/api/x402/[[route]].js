@@ -5,25 +5,23 @@ import { ExactEvmScheme } from "@x402/evm/exact/server";
 import { paymentMiddleware, x402ResourceServer } from "@x402/hono";
 import { createPaywall } from "@x402/paywall";
 import { evmPaywall } from "@x402/paywall/evm";
-import { svmPaywall } from "@x402/paywall/svm";
-import { ExactSvmScheme } from "@x402/svm/exact/server";
 
 const APP_NAME = "Micropayments.fyi";
-const BRIEF_PATH = "/api/x402/brief";
+const ANSWER_PATH = "/api/x402/answer";
 const DEFAULT_PRICE = "$0.01";
-const DEFAULT_SVM_PAY_TO = "GXmQ9JRpefccTssu3yhMmRVmXSJ7JEQa78pp9xQnsM78";
+const TESTNET_DEMO_PAY_TO = "0x000000000000000000000000000000000000dEaD";
 
 const NETWORK_MODES = {
   testnet: {
+    baseNetwork: "Base Sepolia",
     facilitatorUrl: "https://x402.org/facilitator",
-    evmNetwork: "eip155:84532",
-    svmNetwork: "solana:EtWTRABZaYq6iMfeYKouRu166VU2xqa1",
+    network: "eip155:84532",
     testnet: true,
   },
   mainnet: {
+    baseNetwork: "Base",
     facilitatorUrl: "https://facilitator.payai.network",
-    evmNetwork: "eip155:8453",
-    svmNetwork: "solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp",
+    network: "eip155:8453",
     testnet: false,
   },
 };
@@ -55,43 +53,46 @@ const escapeHtml = (value) =>
     return entities[character];
   });
 
+const resolvePayTo = (env, mode) => {
+  if (env.X402_EVM_PAY_TO) {
+    return env.X402_EVM_PAY_TO;
+  }
+
+  return mode === "testnet" ? TESTNET_DEMO_PAY_TO : "";
+};
+
 const buildX402Config = (env = {}) => {
   const mode = normalizeMode(env.X402_NETWORK_MODE);
   const modeConfig = NETWORK_MODES[mode];
-  const price = env.X402_PRICE || DEFAULT_PRICE;
-  const facilitatorUrl = env.X402_FACILITATOR_URL || modeConfig.facilitatorUrl;
-  const evmPayTo = env.X402_EVM_PAY_TO || "";
-  const svmPayTo = env.X402_SVM_PAY_TO || DEFAULT_SVM_PAY_TO;
-  const accepts = [];
-
-  if (evmPayTo) {
-    accepts.push({
-      scheme: "exact",
-      price,
-      network: modeConfig.evmNetwork,
-      payTo: evmPayTo,
-    });
-  }
-
-  accepts.push({
-    scheme: "exact",
-    price,
-    network: modeConfig.svmNetwork,
-    payTo: svmPayTo,
-  });
+  const payTo = resolvePayTo(env, mode);
 
   return {
     ...modeConfig,
-    accepts,
-    briefPath: BRIEF_PATH,
-    facilitatorUrl,
+    accepts: payTo
+      ? [
+          {
+            scheme: "exact",
+            price: env.X402_PRICE || DEFAULT_PRICE,
+            network: modeConfig.network,
+            payTo,
+          },
+        ]
+      : [],
+    answerPath: ANSWER_PATH,
+    configured: Boolean(payTo),
+    facilitatorUrl: env.X402_FACILITATOR_URL || modeConfig.facilitatorUrl,
     mode,
-    price,
+    price: env.X402_PRICE || DEFAULT_PRICE,
   };
 };
 
 const getPaymentMiddleware = (env) => {
   const config = buildX402Config(env);
+
+  if (!config.configured) {
+    return null;
+  }
+
   const key = JSON.stringify({
     mode: config.mode,
     price: config.price,
@@ -107,9 +108,10 @@ const getPaymentMiddleware = (env) => {
     url: config.facilitatorUrl,
   });
 
-  const resourceServer = new x402ResourceServer(facilitatorClient)
-    .register(config.evmNetwork, new ExactEvmScheme())
-    .register(config.svmNetwork, new ExactSvmScheme());
+  const resourceServer = new x402ResourceServer(facilitatorClient).register(
+    config.network,
+    new ExactEvmScheme(),
+  );
 
   const paywallConfig = {
     appName: APP_NAME,
@@ -118,16 +120,15 @@ const getPaymentMiddleware = (env) => {
 
   const paywall = createPaywall()
     .withNetwork(evmPaywall)
-    .withNetwork(svmPaywall)
     .withConfig(paywallConfig)
     .build();
 
   cachedKey = key;
   cachedPaymentMiddleware = paymentMiddleware(
     {
-      [`GET ${BRIEF_PATH}`]: {
+      [`GET ${ANSWER_PATH}`]: {
         accepts: config.accepts,
-        description: "A short paid brief about x402 micropayments",
+        description: "Answer to a deliberately lame red-things joke",
         mimeType: "text/html",
       },
     },
@@ -139,19 +140,16 @@ const getPaymentMiddleware = (env) => {
   return cachedPaymentMiddleware;
 };
 
-const renderPaidBrief = (config) => {
+const renderPaidAnswer = (config) => {
+  const safeNetwork = escapeHtml(config.baseNetwork);
   const safePrice = escapeHtml(config.price);
-  const safeMode = escapeHtml(config.mode);
-  const safeNetworks = config.accepts
-    .map((accept) => escapeHtml(accept.network))
-    .join("<br>");
 
   return `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>x402 brief unlocked</title>
+    <title>x402 joke answer unlocked</title>
     <style>
       :root {
         color: #17201c;
@@ -168,7 +166,7 @@ const renderPaidBrief = (config) => {
       }
 
       main {
-        width: min(760px, 100%);
+        width: min(780px, 100%);
         background: #ffffff;
         border: 1px solid #ccd5d1;
         border-radius: 8px;
@@ -176,14 +174,9 @@ const renderPaidBrief = (config) => {
         padding: clamp(24px, 5vw, 52px);
       }
 
-      a {
-        color: #126c5a;
-        font-weight: 700;
-      }
-
       h1 {
-        margin: 0 0 18px;
-        font-size: clamp(2rem, 6vw, 4rem);
+        margin: 0 0 22px;
+        font-size: clamp(2rem, 6vw, 4.5rem);
         line-height: 0.95;
       }
 
@@ -193,59 +186,58 @@ const renderPaidBrief = (config) => {
         line-height: 1.7;
       }
 
-      dl {
+      .answer {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-        gap: 12px;
+        gap: 14px;
         margin: 28px 0;
       }
 
-      div {
+      .line {
         border: 1px solid #ccd5d1;
         border-radius: 8px;
-        padding: 14px;
+        padding: 18px;
         background: #f7faf8;
       }
 
-      dt {
-        color: #687a72;
+      .line span {
+        display: block;
+        color: #5a6961;
         font-size: 0.76rem;
+        font-weight: 800;
         letter-spacing: 0.08em;
         text-transform: uppercase;
       }
 
-      dd {
-        margin: 8px 0 0;
+      .line strong {
+        display: block;
+        margin-top: 10px;
+        font-size: clamp(1.4rem, 4vw, 2.4rem);
+        line-height: 1.05;
+      }
+
+      a {
+        color: #126c5a;
         font-weight: 800;
       }
     </style>
   </head>
   <body>
     <main>
-      <h1>The paid web page still looks like the web.</h1>
+      <h1>The one-cent punchline.</h1>
       <p>
-        This page was served only after an x402 payment was attached to the HTTP request.
-        No account, checkout session, or API key was needed by the resource server.
+        This answer was served after an x402 payment request for ${safePrice} on ${safeNetwork}.
       </p>
-      <p>
-        The server advertised a ${safePrice} price in a 402 response, the client selected a supported
-        payment requirement, and the retried request carried the signed payment payload.
-      </p>
-      <dl>
-        <div>
-          <dt>Route</dt>
-          <dd>${BRIEF_PATH}</dd>
+      <div class="answer">
+        <div class="line">
+          <span>What&apos;s red and bad for your teeth?</span>
+          <strong>A fucking brick.</strong>
         </div>
-        <div>
-          <dt>Mode</dt>
-          <dd>${safeMode}</dd>
+        <div class="line">
+          <span>What&apos;s red and good for your teeth?</span>
+          <strong>Socialized healthcare.</strong>
         </div>
-        <div>
-          <dt>Networks</dt>
-          <dd>${safeNetworks}</dd>
-        </div>
-      </dl>
-      <p><a href="/">Back to Micropayments.fyi</a></p>
+      </div>
+      <p><a href="/">Back to the Base setup</a></p>
     </main>
   </body>
 </html>`;
@@ -256,7 +248,9 @@ app.get("/api/x402/status", (c) => {
 
   return c.json({
     appName: APP_NAME,
-    endpoint: BRIEF_PATH,
+    answerEndpoint: ANSWER_PATH,
+    baseNetwork: config.baseNetwork,
+    configured: config.configured,
     facilitatorHost: new URL(config.facilitatorUrl).host,
     mode: config.mode,
     price: config.price,
@@ -269,13 +263,24 @@ app.get("/api/x402/status", (c) => {
   });
 });
 
-app.use(BRIEF_PATH, async (c, next) => {
+app.use(ANSWER_PATH, async (c, next) => {
   const middleware = getPaymentMiddleware(c.env);
+
+  if (!middleware) {
+    return c.json(
+      {
+        error:
+          "X402_EVM_PAY_TO is required before Base mainnet payments can be accepted.",
+      },
+      503,
+    );
+  }
+
   return middleware(c, next);
 });
 
-app.get(BRIEF_PATH, (c) => {
-  return c.html(renderPaidBrief(buildX402Config(c.env)));
+app.get(ANSWER_PATH, (c) => {
+  return c.html(renderPaidAnswer(buildX402Config(c.env)));
 });
 
 app.notFound((c) => c.json({ error: "Unknown x402 endpoint" }, 404));

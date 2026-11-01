@@ -19,6 +19,10 @@ remote_release="$repo/releases/$release"
 staging=$(mktemp -d /tmp/micropayments-deploy.XXXXXX)
 ssh_options=(-o BatchMode=yes -o ConnectTimeout=15 -o PermitLocalCommand=no
   -o ControlMaster=auto -o ControlPersist=300 -o "ControlPath=$staging/ssh-%C")
+if [[ -n "${DEPLOY_SSH_IDENTITY:-}" ]]; then
+  ssh_options+=(-o IdentityAgent=none -o IdentitiesOnly=yes -o IgnoreUnknown=UseKeychain
+    -o UseKeychain=yes -i "$DEPLOY_SSH_IDENTITY")
+fi
 cleanup() {
   ssh "${ssh_options[@]}" -O exit do >/dev/null 2>&1 || true
   rm -rf "$staging"

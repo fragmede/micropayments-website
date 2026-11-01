@@ -49,6 +49,10 @@ the previous symlinks, Apache configuration, and service unit in
 The final verification checks the exact public frontend bundle and unpaid
 payment terms. It never signs a payment or moves funds. DNS is unchanged.
 
+If your SSH agent is unavailable, an existing local identity can be selected
+without changing SSH settings: `DEPLOY_SSH_IDENTITY="$HOME/.ssh/id_rsa" npm run deploy`.
+On macOS this can use its already-stored Keychain passphrase.
+
 `npm run deploy:pages` remains available for explicitly updating the optional
 Cloudflare Pages copy; it is not the production deployment command.
 

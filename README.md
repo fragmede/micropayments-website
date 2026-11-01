@@ -2,8 +2,8 @@
 
 Micropayments.fyi is a Cloudflare Pages site where a user can open a wallet
 checkout to reveal a deliberately lame joke answer. The default price is one
-cent, paid with **real USDC on Base mainnet**. Checkout stays unavailable until a
-receiving address is configured. Testnet is an explicit local testing option.
+cent, paid with **real USDC on Base mainnet** to the public receiving address in
+`wrangler.toml`. Testnet is an explicit local testing option.
 
 The React app shows the joke and one checkout button. Wallet help and x402
 details are optional. Checkout stays disabled until the status endpoint returns
@@ -29,8 +29,8 @@ npm start
 `npm start` builds the static bundle and runs `wrangler pages dev dist`, which
 serves both the React app and the Pages Function.
 
-For real payments locally, set `X402_EVM_PAY_TO=0x...` to your public Base
-receiving address in an ignored `.dev.vars` file. Never put a private key here.
+Local development uses the configured real-money receiving address. To override
+it, set `X402_EVM_PAY_TO=0x...` in an ignored `.dev.vars` file. Never put a private key here.
 For a test-funds-only session, override the mode explicitly:
 
 ```bash
@@ -65,8 +65,9 @@ Defaults are in `wrangler.toml`:
 
 - `X402_NETWORK_MODE=mainnet`
 - `X402_PRICE=$0.01`
+- `X402_EVM_PAY_TO=0xA0aA3EdfF38C53765bbe5a6BAc2C31b010099306`
 
-In testnet mode, the function uses a Base Sepolia demo receiver
+When no receiver is configured in testnet mode, the function uses a Base Sepolia demo receiver
 (`0x000000000000000000000000000000000000dEaD`) so the local 402 flow works
 without taking real funds.
 
@@ -76,8 +77,9 @@ Production settings:
 - Leave `X402_NETWORK_MODE=mainnet` for real payments.
 - Set `X402_FACILITATOR_URL` to override the default facilitator.
 
-Do not deploy mainnet payments until `X402_EVM_PAY_TO` is set in Cloudflare
-Pages environment variables.
+The public receiver is deployed as a Cloudflare Pages environment variable from
+`wrangler.toml`. Verify the full address in the `PAYMENT-REQUIRED` header after
+deployment. No private key is needed to receive payments.
 
 ## Human payment research
 

@@ -6,3 +6,4 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 X402_NETWORK_MODE = "mainnet"
 X402_PRICE = "$0.01"
+X402_EVM_PAY_TO = "0xA0aA3EdfF38C53765bbe5a6BAc2C31b010099306"

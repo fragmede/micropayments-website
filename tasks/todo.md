@@ -51,8 +51,9 @@
 - [x] Remove incorrect gas prerequisites, distinguish test funds from real money, and preserve the paid endpoint's access control.
 - [x] Verify build, browser interaction, status failures, and unpaid payment requirements.
 - [x] Record findings, verification limits, and deployment status; review and commit only this task's changes.
-- [ ] Configure the user's Base receiving address and check the receiver's facilitator credits.
-- [ ] Verify real-money payment requirements and settlement with an authorized funded wallet.
+- [x] Configure the user's Base receiving address and check the receiver's facilitator credits.
+- [x] Verify real-money payment requirements with the exact receiving address.
+- [ ] Verify settlement with an authorized funded wallet.
 - [ ] Publish the verified revision and connect the intended public domain.
 
 ## Design and acceptance criteria
@@ -74,3 +75,10 @@
 - Research is in `tasks/payment-flow-research.md`. Base Pay/passkeys are a possible further improvement for people with Coinbase funds; separate secure fulfillment and real compatibility verification remain necessary.
 - No wallet connected, payment approved, or funds moved. Successful settlement and passkey onboarding are unverified.
 - Awaiting the user's public Base receiving address. The Cloudflare Pages project has no production secrets, and its listed domain is only `micropayments-fyi.pages.dev`. The public `micropayments.fyi` domain currently serves the older Solana tutorial and returns 404 for `/api/x402/status`. This revision has not been deployed.
+
+## Real-money activation
+
+- User supplied `0xA0aA3EdfF38C53765bbe5a6BAc2C31b010099306`; address format and checksum are valid.
+- PayAI's receiver-specific free-credit endpoint returns `status: available`, `exhausted: false` for Base mainnet.
+- Plan: verify local mainnet JSON/HTML payment requirements, commit the receiver configuration, deploy the existing Pages project, then verify the public checkout and hosting/domain state. Do not send a payment during these checks.
+- Local checks passed for the exact receiver, Base mainnet (`eip155:8453`), native USDC (`0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`), amount `10000`, token domain `USD Coin` version `2`, protected HTML/JSON 402 responses, and no-store caching. Build passed.

@@ -94,9 +94,9 @@
 - [x] Inspect `ssh do`, identify the micropayments virtual host, source checkout, and current deployment process.
 - [x] Implement the smallest maintainable deployment path for the updated frontend and paid API on the existing host.
 - [x] Verify configuration, build, and payment protection before switching production; preserve a rollback copy.
-- [ ] Fix browser cache reuse with content-hashed frontend assets and HTML revalidation, then verify returning-visitor behavior.
-- [ ] Deploy and verify `https://micropayments.fyi` with the exact mainnet payment receiver.
-- [ ] Document the production deployment command, update results, and commit the changes.
+- [x] Fix browser cache reuse with content-hashed frontend assets and HTML revalidation, then verify returning-visitor behavior.
+- [x] Deploy and verify `https://micropayments.fyi` with the exact mainnet payment receiver.
+- [x] Document the production deployment command, update results, and commit the changes.
 
 User clarified that production should be updated through the existing server (`ssh do`), without a DNS migration.
 
@@ -110,3 +110,6 @@ User clarified that production should be updated through the existing server (`s
 - The first authenticated deployment stopped before activation because the old server lacked a GitHub SSH key. The repository is public; server fetch now uses verified anonymous HTTPS, preserving the original remote URL and adding no credentials.
 - Release `20261101T224104Z-7cfc1b8fa7cb` activated successfully on the existing server. Public checks passed for the exact frontend, mainnet payment terms, protected answer, and private bundle/config returning 404. The service is enabled and listens only on `127.0.0.1:8789`; Apache configuration passes. The unrelated `deploy.txt` remains untouched, and DNS remains `162.243.144.64`.
 - Browser verification caught a cached legacy page despite correct new public bytes. Before marking deployment complete, add content-hashed script names and require HTML revalidation; extend deployment verification to cover the actual HTML and referenced asset.
+- Final release `20261101T224418Z-1a522efd1be9` is live at `https://micropayments.fyi`. All 15 integration checks passed again; public verification confirmed exact HTML, `Cache-Control: no-cache`, the referenced content-hashed bundle, and real $0.01 Base USDC terms for the user's receiver. Separate verifier fixtures rejected stale HTML, stale scripts, and missing cache revalidation.
+- The existing browser session refreshed successfully to the new joke-first interface. Clicking `Reveal for $0.01` opened the production SDK wallet checkout showing $0.01 USD Coin; returning to the homepage retained the new interface. Screenshot saved as `micropayments-production.png` in this task's visualization directory.
+- Previous site/configuration is retained under `/home/fragmede/projects/micropayments-website/deploy-backups/20261101T224418Z-1a522efd1be9`. `npm run deploy` now targets the existing server; the Pages command is explicitly optional. No DNS migration, wallet connection, signature, or payment occurred. Actual settlement remains unverified.

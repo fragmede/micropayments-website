@@ -54,7 +54,8 @@
 - [x] Configure the user's Base receiving address and check the receiver's facilitator credits.
 - [x] Verify real-money payment requirements with the exact receiving address.
 - [ ] Verify settlement with an authorized funded wallet.
-- [ ] Publish the verified revision and connect the intended public domain.
+- [x] Publish and verify the revision at the existing Cloudflare Pages address.
+- [ ] Connect `micropayments.fyi` to the new deployment (currently hosted at Hover/Apache).
 
 ## Design and acceptance criteria
 
@@ -74,7 +75,7 @@
 - API responses now have `Cache-Control: no-store`; review moved the header assignment after middleware completion so replacement settlement-error responses retain it.
 - Research is in `tasks/payment-flow-research.md`. Base Pay/passkeys are a possible further improvement for people with Coinbase funds; separate secure fulfillment and real compatibility verification remain necessary.
 - No wallet connected, payment approved, or funds moved. Successful settlement and passkey onboarding are unverified.
-- Awaiting the user's public Base receiving address. The Cloudflare Pages project has no production secrets, and its listed domain is only `micropayments-fyi.pages.dev`. The public `micropayments.fyi` domain currently serves the older Solana tutorial and returns 404 for `/api/x402/status`. This revision has not been deployed.
+- At the end of the first implementation pass, the receiver was still pending and the revision was not deployed. Activation results follow.
 
 ## Real-money activation
 
@@ -82,3 +83,6 @@
 - PayAI's receiver-specific free-credit endpoint returns `status: available`, `exhausted: false` for Base mainnet.
 - Plan: verify local mainnet JSON/HTML payment requirements, commit the receiver configuration, deploy the existing Pages project, then verify the public checkout and hosting/domain state. Do not send a payment during these checks.
 - Local checks passed for the exact receiver, Base mainnet (`eip155:8453`), native USDC (`0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`), amount `10000`, token domain `USD Coin` version `2`, protected HTML/JSON 402 responses, and no-store caching. Build passed.
+- Deployed commit `24dffa4f9071` to the existing Cloudflare Pages production project. Deployment URL: `https://b86a6f53.micropayments-fyi.pages.dev`; stable URL: `https://micropayments-fyi.pages.dev`.
+- The same mainnet API assertions passed against the public stable URL. Browser verification confirmed the enabled `Reveal for $0.01` button and navigation to the real-money wallet paywall. No wallet connected or payment sent; settlement remains unverified.
+- The custom apex and `www` domains resolve to `162.243.144.64` with Hover nameservers. Updating the apex to Pages requires a separate DNS migration with the complete existing record inventory preserved, or keeping the existing host in front of the new deployment. No registrar, nameserver, or old-server changes were made.

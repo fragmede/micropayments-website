@@ -81,6 +81,13 @@ The public receiver is deployed as a Cloudflare Pages environment variable from
 `wrangler.toml`. Verify the full address in the `PAYMENT-REQUIRED` header after
 deployment. No private key is needed to receive payments.
 
+As of November 1, 2026, the real-money checkout is deployed at
+[micropayments-fyi.pages.dev](https://micropayments-fyi.pages.dev). The custom
+`micropayments.fyi` domain still points to the legacy Hover/Apache host; changing
+that domain requires a separate DNS/hosting migration. Mainnet payment terms
+and browser checkout were verified, but an actual settled payment has not been
+tested.
+
 ## Human payment research
 
 See [the research notes](tasks/payment-flow-research.md) for the comparison with

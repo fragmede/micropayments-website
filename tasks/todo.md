@@ -86,3 +86,23 @@
 - Deployed commit `24dffa4f9071` to the existing Cloudflare Pages production project. Deployment URL: `https://b86a6f53.micropayments-fyi.pages.dev`; stable URL: `https://micropayments-fyi.pages.dev`.
 - The same mainnet API assertions passed against the public stable URL. Browser verification confirmed the enabled `Reveal for $0.01` button and navigation to the real-money wallet paywall. No wallet connected or payment sent; settlement remains unverified.
 - The custom apex and `www` domains resolve to `162.243.144.64` with Hover nameservers. Updating the apex to Pages requires a separate DNS migration with the complete existing record inventory preserved, or keeping the existing host in front of the new deployment. No registrar, nameserver, or old-server changes were made.
+
+# Deploy to the existing production server
+
+## Plan
+
+- [x] Inspect `ssh do`, identify the micropayments virtual host, source checkout, and current deployment process.
+- [x] Implement the smallest maintainable deployment path for the updated frontend and paid API on the existing host.
+- [ ] Verify configuration, build, and payment protection before switching production; preserve a rollback copy.
+- [ ] Deploy and verify `https://micropayments.fyi` with the exact mainnet payment receiver.
+- [ ] Document the production deployment command, update results, and commit the changes.
+
+User clarified that production should be updated through the existing server (`ssh do`), without a DNS migration.
+
+## Review
+
+- Existing Apache document root links to `/home/fragmede/projects/micropayments-website/foo/dist/`. The source checkout is on `main` with only an unrelated untracked `deploy.txt`; it will be preserved.
+- Added a bundled, loopback-only Node API using the same Hono application as the Pages adapter. Apache proxies only this site's `/api/x402/` routes; the paid server bundle is outside its document root.
+- `npm ci` and production build pass. All 15 integration checks pass with Node 22 and the server's Node 20.20.2, including canonical HTTPS URLs, exact mainnet terms, malformed-payment rejection, and missing-receiver behavior. Pages adapter compilation also passes.
+- Deployment scripts retain old releases/configuration and restore them if activation fails or is interrupted. Review addressed stale temporary symlinks, interrupted activation, and checking that the server checkout matches the release commit.
+- SSH inspection succeeded initially. Subsequent connections hit a 1Password agent signing failure; deployment is pending restored SSH authentication. No production changes have been made during this step yet.

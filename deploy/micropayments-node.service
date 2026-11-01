@@ -1,0 +1,25 @@
+[Unit]
+Description=Micropayments x402 API
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/home/fragmede/projects/micropayments-website/current
+Environment=NODE_ENV=production
+Environment=PUBLIC_ORIGIN=https://micropayments.fyi
+Environment=PORT=8789
+EnvironmentFile=/home/fragmede/projects/micropayments-website/current/server-dist/payment.env
+ExecStart=/usr/bin/node /home/fragmede/projects/micropayments-website/current/server-dist/index.mjs
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=130
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+
+[Install]
+WantedBy=multi-user.target

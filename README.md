@@ -1,6 +1,6 @@
 # micropayments.fyi
 
-Micropayments.fyi is a Cloudflare Pages site where a user can open a wallet
+Micropayments.fyi runs on the existing `do` server, where a user can open a wallet
 checkout to reveal a deliberately lame joke answer. The default price is one
 cent, paid with **real USDC on Base mainnet** to the public receiving address in
 `wrangler.toml`. Testnet is an explicit local testing option.
@@ -9,8 +9,10 @@ The React app shows the joke and one checkout button. Wallet help and x402
 details are optional. Checkout stays disabled until the status endpoint returns
 valid payment configuration; failures offer a retry instead of guessed terms.
 
-The paid answer lives at `/api/x402/answer`, protected by a Pages Function using
-`@x402/hono`. Its built-in browser paywall handles connecting a wallet, switching
+Apache serves the frontend and proxies `/api/x402/` to a Node service listening
+only on `127.0.0.1:8789`. The paid answer is protected by `@x402/hono`. The shared
+API lives in `server/app.mjs`; a thin Pages adapter remains for optional previews.
+Its built-in browser paywall handles connecting a wallet, switching
 networks, and signing the exact payment. For this USDC EIP-3009 flow the
 facilitator pays settlement gas, so the buyer does not need ETH for the payment.
 The buyer still needs a compatible wallet and USDC on the requested network.
@@ -18,6 +20,37 @@ The buyer still needs a compatible wallet and USDC on the requested network.
 The punchline is served only after successful settlement and is not bundled in
 the public React app. API responses use `Cache-Control: no-store`. Access is per
 request: refreshing the answer can require another payment.
+
+## Production deployment
+
+From a clean, committed `main` checkout:
+
+```bash
+npm run deploy
+```
+
+This runs the production build and integration tests, pushes `main` to GitHub,
+then connects with `ssh do`. It fast-forwards the server's source checkout at
+`/home/fragmede/projects/micropayments-website` and uploads an isolated release.
+The server runs an API preflight using its own Node runtime before activating
+the release. The old static build and unrelated `deploy.txt` are preserved.
+
+Production uses `micropayments-node.service` and the existing Apache HTTPS
+virtual host. `/var/www/micropayments.fyi` points to `current/dist` inside the
+server checkout. The private `server-dist` bundle stays outside the document
+root because it contains the paid answer. The service's fixed `PUBLIC_ORIGIN`
+ensures payment terms use `https://micropayments.fyi`, regardless of proxy or
+client Host headers.
+
+The deployment requires the existing `do` SSH alias, noninteractive sudo, and
+Node 20 or later on the server. It retains releases in `releases/` and saves
+the previous symlinks, Apache configuration, and service unit in
+`deploy-backups/<release>/`. Failed activation restores the previous site.
+The final verification checks the exact public frontend bundle and unpaid
+payment terms. It never signs a payment or moves funds. DNS is unchanged.
+
+`npm run deploy:pages` remains available for explicitly updating the optional
+Cloudflare Pages copy; it is not the production deployment command.
 
 ## Local development
 
@@ -28,6 +61,10 @@ npm start
 
 `npm start` builds the static bundle and runs `wrangler pages dev dist`, which
 serves both the React app and the Pages Function.
+
+`npm test` builds both deployment artifacts and runs the standalone API tests
+against a local facilitator fixture. No real payment or external facilitator
+request is made by those tests.
 
 Local development uses the configured real-money receiving address. To override
 it, set `X402_EVM_PAY_TO=0x...` in an ignored `.dev.vars` file. Never put a private key here.
@@ -77,16 +114,12 @@ Production settings:
 - Leave `X402_NETWORK_MODE=mainnet` for real payments.
 - Set `X402_FACILITATOR_URL` to override the default facilitator.
 
-The public receiver is deployed as a Cloudflare Pages environment variable from
-`wrangler.toml`. Verify the full address in the `PAYMENT-REQUIRED` header after
-deployment. No private key is needed to receive payments.
-
-As of November 1, 2026, the real-money checkout is deployed at
-[micropayments-fyi.pages.dev](https://micropayments-fyi.pages.dev). The custom
-`micropayments.fyi` domain still points to the legacy Hover/Apache host; changing
-that domain requires a separate DNS/hosting migration. Mainnet payment terms
-and browser checkout were verified, but an actual settled payment has not been
-tested.
+`wrangler.toml` is the source of payment configuration for both runtimes. The
+server build writes its `X402_*` values to `server-dist/payment.env`, which
+systemd loads without shell expansion. Verify the full address in the
+`PAYMENT-REQUIRED` header after deployment. No private key is needed to receive
+payments. An actual settled payment still requires a funded wallet and has not
+been tested by the automated deployment checks.
 
 ## Human payment research
 

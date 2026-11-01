@@ -4,12 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "npm run build",
+    "test": "npm run build:production && node --test tests/*.test.mjs",
     "start": "npm run pages:dev",
     "static": "webpack serve --mode development",
     "pages:dev": "npm run build && wrangler pages dev dist",
     "build": "webpack --mode production",
-    "deploy": "npm run build && CLOUDFLARE_ACCOUNT_ID=48703c6652a6b0977126061a9f99e7cb wrangler pages deploy"
+    "deploy": "bash scripts/deploy.sh",
+    "deploy:pages": "npm run build && CLOUDFLARE_ACCOUNT_ID=48703c6652a6b0977126061a9f99e7cb wrangler pages deploy",
+    "build:server": "node scripts/build-server.mjs",
+    "build:production": "npm run build && npm run build:server"
   },
   "keywords": [],
   "author": "",
@@ -18,6 +21,7 @@
     "@babel/core": "^7.24.7",
     "@babel/preset-env": "^7.24.7",
     "@babel/preset-react": "^7.24.7",
+    "@hono/node-server": "^2.1.5",
     "@x402/core": "^2.17.0",
     "@x402/evm": "^2.17.0",
     "@x402/hono": "^2.17.0",
@@ -35,6 +39,8 @@
   },
   "devDependencies": {
     "copy-webpack-plugin": "^12.0.2",
+    "esbuild": "^0.28.1",
+    "smol-toml": "^1.9.1",
     "wrangler": "^4.107.0"
   }
 }

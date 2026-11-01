@@ -30,7 +30,13 @@ const app = new Hono();
 let cachedKey;
 let cachedPaymentMiddleware;
 
-const normalizeMode = (mode) => (mode === "mainnet" ? "mainnet" : "testnet");
+// Payment terms and paid responses must not be reused by a shared cache.
+app.use("*", async (c, next) => {
+  await next();
+  c.header("Cache-Control", "no-store");
+});
+
+const normalizeMode = (mode) => (mode === "testnet" ? "testnet" : "mainnet");
 
 const compactAddress = (address) => {
   if (!address) {
@@ -128,7 +134,9 @@ const getPaymentMiddleware = (env) => {
     {
       [`GET ${ANSWER_PATH}`]: {
         accepts: config.accepts,
-        description: "Answer to a deliberately lame red-things joke",
+        description: config.testnet
+          ? "Reveal the punchline with test USDC (no real money)"
+          : "Reveal the punchline and a bonus joke",
         mimeType: "text/html",
       },
     },
@@ -149,7 +157,7 @@ const renderPaidAnswer = (config) => {
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>x402 joke answer unlocked</title>
+    <title>Your punchline · Micropayments.fyi</title>
     <style>
       :root {
         color: #17201c;
@@ -158,6 +166,7 @@ const renderPaidAnswer = (config) => {
       }
 
       body {
+        box-sizing: border-box;
         margin: 0;
         min-height: 100vh;
         display: grid;
@@ -166,6 +175,7 @@ const renderPaidAnswer = (config) => {
       }
 
       main {
+        box-sizing: border-box;
         width: min(780px, 100%);
         background: #ffffff;
         border: 1px solid #ccd5d1;
@@ -223,9 +233,10 @@ const renderPaidAnswer = (config) => {
   </head>
   <body>
     <main>
-      <h1>The one-cent punchline.</h1>
+      <h1>Here&apos;s your punchline.</h1>
       <p>
-        This answer was served after an x402 payment request for ${safePrice} on ${safeNetwork}.
+        ${config.testnet ? "Test payment complete. No real money was spent." : "Payment complete."}
+        ${safePrice} ${config.testnet ? "in test USDC" : "in USDC"} on ${safeNetwork}.
       </p>
       <div class="answer">
         <div class="line">
@@ -237,7 +248,8 @@ const renderPaidAnswer = (config) => {
           <strong>Socialized healthcare.</strong>
         </div>
       </div>
-      <p><a href="/">Back to the Base setup</a></p>
+      <p>Keep this page open to keep the answer. A new request may ask for another payment.</p>
+      <p><a href="/">Back to the joke</a></p>
     </main>
   </body>
 </html>`;

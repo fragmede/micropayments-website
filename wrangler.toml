@@ -4,5 +4,5 @@ compatibility_date = "2026-07-06"
 compatibility_flags = ["nodejs_compat"]
 
 [vars]
-X402_NETWORK_MODE = "testnet"
+X402_NETWORK_MODE = "mainnet"
 X402_PRICE = "$0.01"

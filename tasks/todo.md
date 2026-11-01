@@ -40,3 +40,37 @@
 - `GET /assets/base-mark.svg` returns 200 from the local Pages dev server.
 - Source/runtime checks confirm the Base walkthrough, answer payment button, EVM-only server code, copied Base visual asset, and paid joke answer strings.
 - In-app browser click automation timed out twice during verification, so browser interaction was covered by build, curl, decoded-header, and DOM/source checks rather than a completed click trace.
+
+# Simpler Human Payments — 2026-11-01
+
+## Plan
+
+- [x] Inspect the current site, payment route, and shtein.me joke API.
+- [x] Research how agent payment infrastructure can simplify human checkout, including signing, wallet setup, and funding.
+- [x] Replace the setup wizard with a joke-first page and direct checkout; show only verified price/network information and make help optional.
+- [x] Remove incorrect gas prerequisites, distinguish test funds from real money, and preserve the paid endpoint's access control.
+- [x] Verify build, browser interaction, status failures, and unpaid payment requirements.
+- [x] Record findings, verification limits, and deployment status; review and commit only this task's changes.
+- [ ] Configure the user's Base receiving address and check the receiver's facilitator credits.
+- [ ] Verify real-money payment requirements and settlement with an authorized funded wallet.
+- [ ] Publish the verified revision and connect the intended public domain.
+
+## Design and acceptance criteria
+
+- A person can see the joke and enter checkout without completing a tutorial or inspecting HTTP headers.
+- Checkout continues to use the installed x402 wallet connection, network switch, and signature handling. No automatic payment.
+- User requested real money: default to Base mainnet and $0.01 USDC, requiring the user's public receiving address before enabling checkout. Explicit testnet overrides remain available for verification.
+- Loading, failed, or missing configuration never displays an enabled checkout or fabricated payment terms; retry is available.
+- Test mode is explicitly labeled as test USDC with no real-money charge. Wallet/funding help and protocol details use optional disclosures.
+- Evaluate passkey/embedded-wallet and funding options against primary sources; explain what actually removes human work versus simply moving it.
+- The API remains payment protected. Verify HTTP 402 and its network/amount, plus the browser checkout response; do not claim a settled payment without observing it.
+
+## Review
+
+- `npm run build` and `git diff --check` pass. No dependencies added.
+- Interactive browser verification passed in the narrow in-app viewport: optional help, decoded 402 inspection, and the primary button opening the SDK wallet checkout. A local fixture verified malformed status, HTTP 503, and retry recovery; each failure kept checkout disabled.
+- API checks passed for default Base mainnet/$0.01 with missing receiver (status `configured: false`, checkout 503), and an explicitly overridden Base Sepolia test session (JSON/HTML 402, amount 10000, expected network). Malformed payment signatures were rejected and unpaid responses did not contain the punchline.
+- API responses now have `Cache-Control: no-store`; review moved the header assignment after middleware completion so replacement settlement-error responses retain it.
+- Research is in `tasks/payment-flow-research.md`. Base Pay/passkeys are a possible further improvement for people with Coinbase funds; separate secure fulfillment and real compatibility verification remain necessary.
+- No wallet connected, payment approved, or funds moved. Successful settlement and passkey onboarding are unverified.
+- Awaiting the user's public Base receiving address. The Cloudflare Pages project has no production secrets, and its listed domain is only `micropayments-fyi.pages.dev`. The public `micropayments.fyi` domain currently serves the older Solana tutorial and returns 404 for `/api/x402/status`. This revision has not been deployed.

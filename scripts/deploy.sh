@@ -33,7 +33,7 @@ trap cleanup EXIT
 ssh "${ssh_options[@]}" do "git -C '$repo' diff --exit-code HEAD && test -L /var/www/micropayments.fyi"
 git push origin HEAD:main
 
-tar -czf "$staging/release.tar.gz" dist server-dist deploy scripts/activate-release.sh scripts/verify-payment.mjs
+COPYFILE_DISABLE=1 tar --no-xattrs -czf "$staging/release.tar.gz" dist server-dist deploy scripts/activate-release.sh scripts/verify-payment.mjs
 ssh "${ssh_options[@]}" do "mkdir -p '$remote_release'"
 scp "${ssh_options[@]}" "$staging/release.tar.gz" "do:$remote_release/release.tar.gz"
 ssh "${ssh_options[@]}" do "tar -xzf '$remote_release/release.tar.gz' -C '$remote_release' && rm '$remote_release/release.tar.gz' && bash '$remote_release/scripts/activate-release.sh' '$commit' '$release'"

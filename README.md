@@ -32,6 +32,8 @@ npm run deploy
 This runs the production build and integration tests, pushes `main` to GitHub,
 then connects with `ssh do`. It fast-forwards the server's source checkout at
 `/home/fragmede/projects/micropayments-website` and uploads an isolated release.
+The server fetches this public repository over HTTPS, so it does not need a
+GitHub SSH key.
 The server runs an API preflight using its own Node runtime before activating
 the release. The old static build and unrelated `deploy.txt` are preserved.
 

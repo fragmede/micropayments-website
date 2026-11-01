@@ -15,7 +15,8 @@ exec 9>"$repo/.deploy.lock"
 flock -n 9
 
 git -C "$repo" diff --exit-code HEAD
-git -C "$repo" fetch origin main
+GIT_TERMINAL_PROMPT=0 git -C "$repo" -c credential.helper= fetch \
+  https://github.com/fragmede/micropayments-website.git main:refs/remotes/origin/main
 git -C "$repo" merge --ff-only "$commit"
 test "$(git -C "$repo" rev-parse HEAD)" = "$commit"
 test -L "$webroot"

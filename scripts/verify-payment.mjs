@@ -54,13 +54,23 @@ assert.equal(invalid.status, 402);
 assert(!(await invalid.text()).includes("Socialized healthcare"));
 
 if (mode !== "--api-only") {
+  const expectedHtml = await readFile(new URL("../dist/index.html", import.meta.url), "utf8");
+  const scripts = [...expectedHtml.matchAll(/<script\b[^>]*\bsrc=(['"])([^'"]+)\1/gi)];
+  assert.equal(scripts.length, 1, "Expected one frontend entry script in the built page");
+  const bundleUrl = new URL(scripts[0][2], new URL("/", origin));
+  assert.equal(bundleUrl.origin, new URL(origin).origin, "Frontend entry script must be served by this site");
+
   const page = await request("/");
   assert.equal(page.status, 200);
-  assert((await page.text()).includes("Micropayments.fyi"));
-  const bundle = await request("/bundle.js");
+  assert(
+    (page.headers.get("cache-control") || "").split(",").some((directive) => directive.trim().toLowerCase() === "no-cache"),
+    "Homepage must require cache revalidation with Cache-Control: no-cache",
+  );
+  assert.equal(await page.text(), expectedHtml, "Public index HTML does not match this release");
+  const bundle = await request(bundleUrl.href);
   assert.equal(bundle.status, 200);
   const digest = (data) => createHash("sha256").update(data).digest("hex");
-  const expected = await readFile(new URL("../dist/bundle.js", import.meta.url));
+  const expected = await readFile(new URL(`../dist${bundleUrl.pathname}`, import.meta.url));
   assert.equal(digest(Buffer.from(await bundle.arrayBuffer())), digest(expected), "Public frontend does not match this release");
 }
 console.log(`Verified ${origin}: current payment terms, receiver, canonical URL, unpaid access control${mode === "--api-only" ? "" : ", and exact frontend build"}. No payment sent.`);

@@ -48,6 +48,8 @@ The deployment requires the existing `do` SSH alias, noninteractive sudo, and
 Node 20 or later on the server. It retains releases in `releases/` and saves
 the previous symlinks, Apache configuration, and service unit in
 `deploy-backups/<release>/`. Failed activation restores the previous site.
+HTML requires cache revalidation, and each frontend build has a content-hashed
+script filename so returning visitors receive updated code.
 The final verification checks the exact public frontend bundle and unpaid
 payment terms. It never signs a payment or moves funds. DNS is unchanged.
 

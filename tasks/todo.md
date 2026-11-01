@@ -55,7 +55,7 @@
 - [x] Verify real-money payment requirements with the exact receiving address.
 - [ ] Verify settlement with an authorized funded wallet.
 - [x] Publish and verify the revision at the existing Cloudflare Pages address.
-- [ ] Connect `micropayments.fyi` to the new deployment (currently hosted at Hover/Apache).
+- [x] Update `micropayments.fyi` on its existing Apache server (supersedes the proposed DNS migration).
 
 ## Design and acceptance criteria
 
@@ -93,7 +93,8 @@
 
 - [x] Inspect `ssh do`, identify the micropayments virtual host, source checkout, and current deployment process.
 - [x] Implement the smallest maintainable deployment path for the updated frontend and paid API on the existing host.
-- [ ] Verify configuration, build, and payment protection before switching production; preserve a rollback copy.
+- [x] Verify configuration, build, and payment protection before switching production; preserve a rollback copy.
+- [ ] Fix browser cache reuse with content-hashed frontend assets and HTML revalidation, then verify returning-visitor behavior.
 - [ ] Deploy and verify `https://micropayments.fyi` with the exact mainnet payment receiver.
 - [ ] Document the production deployment command, update results, and commit the changes.
 
@@ -107,3 +108,5 @@ User clarified that production should be updated through the existing server (`s
 - Deployment scripts retain old releases/configuration and restore them if activation fails or is interrupted. Review addressed stale temporary symlinks, interrupted activation, and checking that the server checkout matches the release commit.
 - SSH inspection succeeded initially. A later 1Password agent signing failure was resolved by using the existing local RSA identity through macOS Keychain, without changing SSH settings. `DEPLOY_SSH_IDENTITY` supports that normal authentication fallback for deployment.
 - The first authenticated deployment stopped before activation because the old server lacked a GitHub SSH key. The repository is public; server fetch now uses verified anonymous HTTPS, preserving the original remote URL and adding no credentials.
+- Release `20261101T224104Z-7cfc1b8fa7cb` activated successfully on the existing server. Public checks passed for the exact frontend, mainnet payment terms, protected answer, and private bundle/config returning 404. The service is enabled and listens only on `127.0.0.1:8789`; Apache configuration passes. The unrelated `deploy.txt` remains untouched, and DNS remains `162.243.144.64`.
+- Browser verification caught a cached legacy page despite correct new public bytes. Before marking deployment complete, add content-hashed script names and require HTML revalidation; extend deployment verification to cover the actual HTML and referenced asset.

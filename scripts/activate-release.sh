@@ -75,6 +75,7 @@ rollback() {
 }
 trap rollback ERR HUP INT TERM
 
+sudo -n a2enmod headers
 sudo -n install -m 644 "$candidate/deploy/micropayments-node.service" "$unit"
 sudo -n install -m 644 "$candidate/deploy/apache-api.conf" "$api_config"
 if ! grep -qF "IncludeOptional $api_config" "$vhost"; then
